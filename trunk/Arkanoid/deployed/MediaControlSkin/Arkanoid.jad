@@ -1,0 +1,8 @@
+MIDlet-1: ArkanoidMidlet,,midlets.ArkanoidMidlet
+MIDlet-Jar-Size: 65623
+MIDlet-Jar-URL: Arkanoid.jar
+MIDlet-Name: Arkanoid MIDlet Suite
+MIDlet-Vendor: MIDlet Suite Vendor
+MIDlet-Version: 1.0.0
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.0
