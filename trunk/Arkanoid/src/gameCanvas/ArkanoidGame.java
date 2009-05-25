@@ -47,8 +47,8 @@ public class ArkanoidGame extends GameCanvas implements Runnable {
 		score = 0;
 		ballSpeed = 1;
 		randPosicaoInicialBola = new Random();
-		posicaoAnteriorX = 0;
-		posicaoAnteriorY = 0;
+		posicaoAnteriorX = -1;
+		posicaoAnteriorY = -1;
 		 
 		Graphics g;
 		padImage = Image.createImage(PAD_WIDTH, PAD_HEIGHT);
@@ -143,23 +143,32 @@ public class ArkanoidGame extends GameCanvas implements Runnable {
 	
 	private void calculaTrajetoriaBola(){
 		
-		int posicaoAtualX = getWidth();
-		int posicaoAtualY = getHeight();
+		int posicaoAtualX = ball.getX();
+		int posicaoAtualY = ball.getY();
 		
-		if ((posicaoAnteriorX == 0) && (posicaoAnteriorY == 0)){
-			posicaoAnteriorY = 6*ballSpeed;
-			ball.move(0, posicaoAnteriorY * ballSpeed);
+		if ((posicaoAnteriorX == -1) && (posicaoAnteriorY == -1)){
+			posicaoAnteriorX = posicaoAtualX;
+			posicaoAnteriorY = 0;
+			ball.move(0, 6 * ballSpeed);
+			
 			ball.nextFrame();
 			
 		}
 		else{
-			posicaoAnteriorX = (ball.getX() - posicaoAnteriorX)* ballSpeed;
-			posicaoAnteriorY = (ball.getY() - posicaoAnteriorY)* ballSpeed;
-			System.out.println("X anterior: " +ball.getX());
-			System.out.println("Y anterior: " +ball.getY());
-			System.out.println("X atual: " +posicaoAnteriorX);
-			System.out.println("Y atual: " +posicaoAnteriorY);
-			ball.move(posicaoAnteriorX, posicaoAnteriorY);
+			System.out.println("Posicao anteriro X: " + posicaoAnteriorX);			
+			System.out.println("Posicao anteriro Y: " + posicaoAnteriorY);
+			System.out.println("Posicao atual X: "+ posicaoAtualX);
+			System.out.println("Posicao atual Y: "+ posicaoAtualY);
+			
+			
+			posicaoAtualX = (posicaoAtualX - posicaoAnteriorX)* ballSpeed;
+			posicaoAtualY = (posicaoAtualY - posicaoAnteriorY)* ballSpeed;
+			posicaoAnteriorX = ball.getX();
+			posicaoAnteriorY = ball.getY();
+			
+			System.out.println("Vai para X: " + posicaoAtualX);
+			System.out.println("Vai para Y: " + posicaoAtualY);
+			ball.move(posicaoAtualX, posicaoAtualY);
 			ball.nextFrame();
 		}
 		
