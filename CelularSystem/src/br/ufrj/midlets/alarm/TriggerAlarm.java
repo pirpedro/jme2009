@@ -16,15 +16,17 @@ import javax.microedition.rms.RecordStoreNotOpenException;
 
 public class TriggerAlarm extends MIDlet {
 
-	private final String RECORD_STORE = "CarSystem";
-	private final String MSG_DEFAULT = "Celular Roubado:";
+	private final String RECORD_STORE = "CelularSystem";
+	private final String MSG_DEFAULT = "Celular Roubado!";
 	private final int TEMPO_VIBRACAO = 1000*60*1;
 	private final int TEMPO_LUZ = 1000*60*1;
-	private final long PROXIMO_ALARM = 1000*60*5;
+	private final long PROXIMO_ALARM = 1000*60*4;
+	private final long SLEEP = 1000*60*1;
 	
 	private Display display;
 	private Alert alarm;
 	private RecordStore arquivo;
+	private Thread thread;
 	
 	public TriggerAlarm() {
 		abrirArquivo();
@@ -37,7 +39,8 @@ public class TriggerAlarm extends MIDlet {
 
 	protected void destroyApp(boolean unconditional)
 			throws MIDletStateChangeException {
-		
+		fecharArquivo();
+		thread = null;
 
 	}
 
@@ -48,7 +51,11 @@ public class TriggerAlarm extends MIDlet {
 
 	protected void startApp() throws MIDletStateChangeException {
 		display.setCurrent(alarm);
-		disparaAlarme();
+		if (thread == null){
+			thread = new Thread(new DisparaAlarme());
+		}
+		
+		thread.start();
 
 	}
 	
@@ -74,29 +81,6 @@ public class TriggerAlarm extends MIDlet {
 		}
 	}
 	
-	public void disparaAlarme(){
-		
-		try {
-			if (arquivo.getNumRecords()!=0){
-				if (new String(arquivo.getRecord(1)).equals("1")){
-				
-					alarm.setString(new String(arquivo.getRecord(2)));
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		display.flashBacklight(TEMPO_LUZ);
-		display.vibrate(TEMPO_VIBRACAO);
-		
-		
-		
-		
-		fecharArquivo();
-	}
-	
-	
 	//verifica se o midlet deve se registrar novamente
 	public void checaNovoRegistro(){
 		try {
@@ -112,5 +96,34 @@ public class TriggerAlarm extends MIDlet {
 			e.printStackTrace();
 		}
 	}
+	
+	class DisparaAlarme implements Runnable{
 
+		public void run() {
+			try {
+				if (arquivo.getNumRecords()!=0){
+					if (new String(arquivo.getRecord(1)).equals("1")){
+					
+						alarm.setString(new String(arquivo.getRecord(2)));
+					}
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			display.flashBacklight(TEMPO_LUZ);
+			display.vibrate(TEMPO_VIBRACAO);
+			try {
+				Thread.sleep(SLEEP);
+				notifyDestroyed();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	
+	}
+		
 }
