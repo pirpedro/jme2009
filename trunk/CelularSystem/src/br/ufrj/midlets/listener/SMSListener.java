@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.PushRegistry;
+import javax.microedition.lcdui.Display;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import javax.microedition.rms.RecordStore;
@@ -22,20 +23,19 @@ import br.ufrj.midlets.alarm.TriggerAlarm;
 public class SMSListener extends MIDlet implements MessageListener{
 
 	private final String CONNECTION_TYPE = "sms";
-	private final String SMS_PORT = "5000";
-	private final String RECORD_STORE = "CarSystem";
+	private final String SMS_PORT = "5050";
+	private final String RECORD_STORE = "CelularSystem";
 	private final String ALARM_MIDLET = TriggerAlarm.class.getName();
-	private final int ALARM_DELAY = 1000*10;
+	private final int ALARM_DELAY = 1000*15;
 	
+	private Display display;
 	private Thread thread;
 	private MessageConnection conexaoSMS;
 	private TextMessage msg;
 	private RecordStore arquivo;
 	
-	//private TriggerAlarm alarm;
-		
 	public SMSListener() {
-		
+		display = Display.getDisplay(this);
 	}
 
 	protected void destroyApp(boolean unconditional)
@@ -146,7 +146,6 @@ public class SMSListener extends MIDlet implements MessageListener{
 					
 				}
 				
-				thread = null;
 				
 				notifyDestroyed();
 			
@@ -168,7 +167,7 @@ public class SMSListener extends MIDlet implements MessageListener{
 				arquivo.setRecord(2,dado , 0, dado.length);
 			} catch (RecordStoreNotOpenException e) {
 				e.printStackTrace();
-			} catch (Exception e){
+			} catch (RecordStoreException e){
 				e.printStackTrace();
 			}
 			

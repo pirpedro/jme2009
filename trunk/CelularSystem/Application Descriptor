@@ -2,7 +2,7 @@ MIDlet-2: TriggerAlarm,,br.ufrj.midlets.alarm.TriggerAlarm
 MIDlet-1: SMSListener,,br.ufrj.midlets.listener.SMSListener
 MIDlet-Jar-URL: CelularSystem.jar
 MicroEdition-Configuration: CLDC-1.1
-MIDlet-Push-1: sms://:5000,br.ufrj.midlets.listener.SMSListener,*
+MIDlet-Push-1: sms://:5050,br.ufrj.midlets.listener.SMSListener,*
 MIDlet-Version: 1.0.0
 MIDlet-Name: CelularSystem
 MIDlet-Vendor: MIDlet Suite Vendor
