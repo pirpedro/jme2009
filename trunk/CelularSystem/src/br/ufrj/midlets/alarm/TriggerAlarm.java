@@ -5,7 +5,6 @@ import java.util.Date;
 import javax.microedition.io.PushRegistry;
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.Display;
-import javax.microedition.lcdui.StringItem;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import javax.microedition.rms.RecordStore;
@@ -18,7 +17,7 @@ public class TriggerAlarm extends MIDlet {
 
 	private final String RECORD_STORE = "CelularSystem";
 	private final String MSG_DEFAULT = "Celular Roubado!";
-	private final int TEMPO_VIBRACAO = 1000*60*1;
+	private final int TEMPO_VIBRACAO = 1000*60*2;
 	private final int TEMPO_LUZ = 1000*60*1;
 	private final long PROXIMO_ALARM = 1000*60*4;
 	private final long SLEEP = 1000*60*1;
@@ -114,11 +113,11 @@ public class TriggerAlarm extends MIDlet {
 			
 			display.flashBacklight(TEMPO_LUZ);
 			display.vibrate(TEMPO_VIBRACAO);
+			
 			try {
 				Thread.sleep(SLEEP);
 				notifyDestroyed();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
