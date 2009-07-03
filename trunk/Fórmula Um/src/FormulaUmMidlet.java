@@ -27,7 +27,7 @@ public class FormulaUmMidlet extends MIDlet
 	{
 		game = new Game(Display.getDisplay(this));
 		
-		game.run();
+		game.start();
 	}
 	
 	private Game game;

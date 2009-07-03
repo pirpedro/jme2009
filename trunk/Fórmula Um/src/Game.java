@@ -10,13 +10,76 @@ import javax.microedition.lcdui.game.TiledLayer;
 
 public class Game extends GameCanvas implements Runnable
 {
-
 	protected Game(Display display)
 	{
 		super(true);
 		// TODO Auto-generated constructor stub
 
 		this.display = display;
+	}
+	
+	public void start()
+	{
+		display.setCurrent(this);
+		
+		loading();	
+		
+		sleeping = false;
+		
+		Thread thread = new Thread(this);
+
+		thread.start();
+		
+		car = new Car(0);
+	}
+	
+	private void draw(Graphics graphics)
+	{
+		layerManager.paint(graphics, 0, 0);
+		
+		flushGraphics();
+	}
+	
+	private void update()
+	{
+		if (++inputDelay > 2) 
+		{
+			int keyState = getKeyStates();
+			
+			if ((keyState & LEFT_PRESSED) != 0)
+			{	
+				car.turnLeft();			
+			}
+			else if ((keyState & RIGHT_PRESSED) != 0)
+			{			
+				car.turnRight();
+			}
+			if ((keyState & UP_PRESSED) != 0)
+			{
+				car.speedUp();
+			}
+		}
+		
+		if(car.getQuadrante() == 1)
+		{
+			carSprite.setTransform(Sprite.TRANS_NONE);
+		}
+		if(car.getQuadrante() == 2)
+		{
+			carSprite.setTransform(Sprite.TRANS_ROT90);
+		}
+		if(car.getQuadrante() == 3)
+		{
+			carSprite.setTransform(Sprite.TRANS_ROT180);
+		}
+		if(car.getQuadrante() == 4)
+		{
+			carSprite.setTransform(Sprite.TRANS_ROT270);
+		}
+		
+		carSprite.setFrame(car.getFrame());
+		carSprite.move(car.returnDX(), car.returnDY());
+		layerManager.setViewWindow(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight(), getWidth(), getHeight());
 	}
 
 	private void loading()
@@ -28,11 +91,11 @@ public class Game extends GameCanvas implements Runnable
 		try
 		{
 			trackLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
-			car = new Sprite(Image.createImage("/carros.png"), TAM_SPRITE_CAR, TAM_SPRITE_CAR);
+			carSprite = new Sprite(Image.createImage("/carros.png"), TAM_SPRITE_CAR, TAM_SPRITE_CAR);
 		}
-		catch (IOException e)
+		catch (IOException exception)
 		{
-			e.printStackTrace();
+			exception.printStackTrace();
 		}
 
 		int[] track = { 25, 25, 25, 23, 23, 23, 23, 25, 25, 25,
@@ -53,54 +116,47 @@ public class Game extends GameCanvas implements Runnable
 			trackLayer.setCell(column, row, track[i]);
 		}
 		
-		layerManager.append(car);
+		layerManager.append(carSprite);
 		layerManager.append(trackLayer);
+		
+		carSprite.setPosition(INITIAL_POSITION_X, INITIAL_POSITION_Y);
 	}
 
 	public void run()
-	{
-		display.setCurrent(this);
-
-		loading();
-
-		int x = 0;
-		int y = 0;
-
+	{		
 		Graphics graphics = getGraphics();
-		layerManager.paint(graphics, x, y);
 
-		while (true)
+		while (!sleeping)
 		{
-			car.setPosition(x, y);
-			layerManager.setViewWindow(x, y, getWidth(), getHeight());
-			layerManager.paint(graphics, 0, 0);
-			flushGraphics();
-
-			int keyState = getKeyStates();
-			if ((keyState & LEFT_PRESSED) != 0)
+			update();
+			
+			car.update();
+			
+			draw(graphics);
+			
+			try
 			{
-				x--;
+				Thread.sleep(FRAME_DELAY);
 			}
-			else if ((keyState & RIGHT_PRESSED) != 0)
+			catch (InterruptedException exception) 
 			{
-				x++;
-			}
-			if ((keyState & UP_PRESSED) != 0)
-			{
-				y--;
-			}
-			else if ((keyState & DOWN_PRESSED) != 0)
-			{
-				y++;
+				exception.printStackTrace();
 			}
 		}
 	}
-
+	
 	private final int TAM_TRACK = 10;
 	private final int TAM_SPRITE_TRACK = 150;
 	private final int TAM_SPRITE_CAR = 64;
+	private final int FRAME_DELAY = 33;
+	private static final int INITIAL_POSITION_X = 0;
+	private static final int INITIAL_POSITION_Y = 0;
 
 	private LayerManager layerManager;
 	private Display display;
-	private Sprite car;
+	private Sprite carSprite;
+	private boolean sleeping;
+	private int inputDelay;
+	
+	private Car car;
 }
