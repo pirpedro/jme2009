@@ -13,7 +13,6 @@ public class Game extends GameCanvas implements Runnable
 	protected Game(Display display)
 	{
 		super(true);
-		// TODO Auto-generated constructor stub
 
 		this.display = display;
 	}
@@ -30,7 +29,9 @@ public class Game extends GameCanvas implements Runnable
 
 		thread.start();
 		
-		car = new Car(0);
+		car = new Car(90);
+		botOne = new Bot(90);
+		botTwo = new Bot(90);
 	}
 	
 	private void draw(Graphics graphics)
@@ -90,8 +91,44 @@ public class Game extends GameCanvas implements Runnable
 		{
 			carSprite.setTransform(Sprite.TRANS_ROT270);
 		}
+		
+		if(botOne.getQuadrante() == 1)
+		{
+			botOneSprite.setTransform(Sprite.TRANS_NONE);
+		}
+		if(botOne.getQuadrante() == 2)
+		{
+			botOneSprite.setTransform(Sprite.TRANS_ROT90);
+		}
+		if(botOne.getQuadrante() == 3)
+		{
+			botOneSprite.setTransform(Sprite.TRANS_ROT180);
+		}
+		if(botOne.getQuadrante() == 4)
+		{
+			botOneSprite.setTransform(Sprite.TRANS_ROT270);
+		}
+		
+		if(botTwo.getQuadrante() == 1)
+		{
+			botTwoSprite.setTransform(Sprite.TRANS_NONE);
+		}
+		if(botTwo.getQuadrante() == 2)
+		{
+			botTwoSprite.setTransform(Sprite.TRANS_ROT90);
+		}
+		if(botTwo.getQuadrante() == 3)
+		{
+			botTwoSprite.setTransform(Sprite.TRANS_ROT180);
+		}
+		if(botTwo.getQuadrante() == 4)
+		{
+			botTwoSprite.setTransform(Sprite.TRANS_ROT270);
+		}
 			
 		carSprite.setFrame(car.getFrame());
+		botOneSprite.setFrame(botOne.getFrame(1));
+		botTwoSprite.setFrame(botTwo.getFrame(2));
 		
 		carSprite.move(car.returnDX(), - car.returnDY());
 		
@@ -99,7 +136,7 @@ public class Game extends GameCanvas implements Runnable
 		{
 			carSprite.move(-car.returnDX(), car.returnDY());
 		}
-				
+		
 		layerManager.setViewWindow(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight(), getWidth(), getHeight());
 	}
 
@@ -111,6 +148,14 @@ public class Game extends GameCanvas implements Runnable
 		}
 		
 		if(carSprite.collidesWith(objectsLayer, true))
+		{
+			return true;
+		}
+		if(carSprite.collidesWith(botOneSprite, true))
+		{
+			return true;
+		}
+		if(carSprite.collidesWith(botTwoSprite, true))
 		{
 			return true;
 		}
@@ -131,6 +176,8 @@ public class Game extends GameCanvas implements Runnable
 			bleacherLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			trackLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			carSprite = new Sprite(Image.createImage("/carros.png"), TAM_SPRITE_CAR, TAM_SPRITE_CAR);
+			botOneSprite = new Sprite(Image.createImage("/carros.png"), TAM_SPRITE_CAR, TAM_SPRITE_CAR);
+			botTwoSprite = new Sprite(Image.createImage("/carros.png"), TAM_SPRITE_CAR, TAM_SPRITE_CAR);
 		}
 		catch (IOException exception)
 		{
@@ -151,7 +198,7 @@ public class Game extends GameCanvas implements Runnable
 		int[] objects =	{ 	2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  0,
 		               	  	2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  1,  1,  1,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -203,15 +250,22 @@ public class Game extends GameCanvas implements Runnable
 
 			objectsLayer.setCell(column, row, objects[i]);
 		}
-		
+				
 		layerManager.append(objectsLayer);
 		layerManager.append(bleacherLayer);
+		layerManager.append(botOneSprite);
+		layerManager.append(botTwoSprite);		
 		layerManager.append(carSprite);
 		layerManager.append(trackLayer);
 		layerManager.append(floorLayer);
 		
 		carSprite.defineReferencePixel(carSprite.getWidth()/2,carSprite.getHeight()/2);
+		
 		carSprite.setPosition(INITIAL_POSITION_X, INITIAL_POSITION_Y);
+		
+		botOneSprite.setPosition(BOT_ONE_INITIAL_POSITION_X, BOT_ONE_INITIAL_POSITION_Y);
+		
+		botTwoSprite.setPosition(BOT_TWO_INITIAL_POSITION_X, BOT_TWO_INITIAL_POSITION_Y);
 	}
 
 	public void run()
@@ -242,17 +296,25 @@ public class Game extends GameCanvas implements Runnable
 	private final int TAM_SPRITE_TRACK = 150;
 	private final int TAM_SPRITE_CAR = 64;
 	private final int FRAME_DELAY = 33;
-	private static final int INITIAL_POSITION_X = 750;
-	private static final int INITIAL_POSITION_Y = 750;
+	private static final int INITIAL_POSITION_X = 519;
+	private static final int INITIAL_POSITION_Y = 163;
+	private static final int BOT_ONE_INITIAL_POSITION_X = 670;
+	private static final int BOT_ONE_INITIAL_POSITION_Y = 170;	
+	private static final int BOT_TWO_INITIAL_POSITION_X = 585;
+	private static final int BOT_TWO_INITIAL_POSITION_Y = 220;
 	private static final int TAM_SPRITE_OBJECTS = 102;
 
 	private LayerManager layerManager;
 	private Display display;
 	private Sprite carSprite;
+	private Sprite botOneSprite;
+	private Sprite botTwoSprite;
 	private boolean sleeping;
 	private int inputDelay;
 	
 	private Car car;
+	private Bot botOne;
+	private Bot botTwo;
 	
 	private TiledLayer bleacherLayer = null;
 	private TiledLayer trackLayer = null;
