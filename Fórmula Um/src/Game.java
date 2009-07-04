@@ -185,7 +185,7 @@ public class Game extends GameCanvas implements Runnable
 		
 		layerManager.append(objectsLayer);
 		layerManager.append(bleacherLayer);
-//		layerManager.append(carSprite);
+		layerManager.append(carSprite);
 		layerManager.append(trackLayer);
 		layerManager.append(floorLayer);
 		
