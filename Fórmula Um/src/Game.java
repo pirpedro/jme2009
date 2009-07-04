@@ -78,7 +78,7 @@ public class Game extends GameCanvas implements Runnable
 		}
 		
 		carSprite.setFrame(car.getFrame());
-		carSprite.move(car.returnDX(), car.returnDY());
+		carSprite.move(car.returnDX(), - car.returnDY());
 		layerManager.setViewWindow(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight(), getWidth(), getHeight());
 	}
 
@@ -119,6 +119,7 @@ public class Game extends GameCanvas implements Runnable
 		layerManager.append(carSprite);
 		layerManager.append(trackLayer);
 		
+		carSprite.defineReferencePixel(carSprite.getWidth()/2,carSprite.getHeight()/2);
 		carSprite.setPosition(INITIAL_POSITION_X, INITIAL_POSITION_Y);
 	}
 

@@ -17,7 +17,7 @@ public class Car
 	
 	public void speedUp()
 	{
-		if(speed <= 8)
+		if(speed <= MAX_SPEED)
 			speed = speed + 2;
 	}
 	
@@ -39,17 +39,17 @@ public class Car
 	
 	public int returnDX()
 	{
-		return speed;
+		return ((int) Math.floor((Math.sin(Math.toRadians(angle)) * speed)));
 	}
 	
 	public int returnDY()
 	{
-		return speed;
+		return ((int) Math.floor((Math.cos(Math.toRadians(angle)) * speed)));
 	}
 	
 	public int getFrame()
 	{
-		if(angle == 0 || angle == 360)
+		if(angle == 0 || angle == 360 || angle == 90 || angle == 180)
 			return 0;
 			
 		if(angle == 22.5 || angle == 22.5 + 90 || angle == 22.5 + 180 || angle == 22.5 + 270)
@@ -60,9 +60,6 @@ public class Car
 		
 		if(angle == 67.5 || angle == 67.5 + 90 || angle == 67.5 + 180 || angle == 67.5 + 270)
 			return 3;
-		
-		if(angle == 90 || angle == 180)
-			return 5;
 		
 		return 0;
 	}
@@ -86,4 +83,6 @@ public class Car
 	
 	private double angle;
 	private int speed;
+	
+	private final int MAX_SPEED = 8;
 }
