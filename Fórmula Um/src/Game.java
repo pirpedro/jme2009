@@ -48,15 +48,29 @@ public class Game extends GameCanvas implements Runnable
 			
 			if ((keyState & LEFT_PRESSED) != 0)
 			{	
-				car.turnLeft();			
+				car.turnLeft();
+				
+				if(checkCollision())
+				{
+					car.turnRight();
+				}
 			}
 			else if ((keyState & RIGHT_PRESSED) != 0)
 			{			
 				car.turnRight();
+				
+				if(checkCollision())
+				{
+					car.turnLeft();
+				}
 			}
 			if ((keyState & UP_PRESSED) != 0)
 			{
 				car.speedUp();
+			}
+			if ((keyState & DOWN_PRESSED) != 0)
+			{
+				car.reverse();
 			}
 		}
 		
@@ -79,9 +93,11 @@ public class Game extends GameCanvas implements Runnable
 			
 		carSprite.setFrame(car.getFrame());
 		
+		carSprite.move(car.returnDX(), - car.returnDY());
+		
 		if(checkCollision())
 		{
-			carSprite.move(car.returnDX(), - car.returnDY());
+			carSprite.move(-car.returnDX(), car.returnDY());
 		}
 				
 		layerManager.setViewWindow(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight(), getWidth(), getHeight());
@@ -91,15 +107,15 @@ public class Game extends GameCanvas implements Runnable
 	{
 		if(carSprite.collidesWith(bleacherLayer, true))
 		{
-			return false;
+			return true;
 		}
 		
 		if(carSprite.collidesWith(objectsLayer, true))
 		{
-			return false;
+			return true;
 		}
 		
-		return true;
+		return false;
 	}
 
 	private void loading()

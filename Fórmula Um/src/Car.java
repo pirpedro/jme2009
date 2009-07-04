@@ -12,6 +12,9 @@ public class Car
 	{
 		if(speed > 0)
 			speed = speed - 1;
+		
+		if(speed < 0)
+			speed = speed + 1;
 	}
 	
 	
@@ -19,6 +22,12 @@ public class Car
 	{
 		if(speed <= MAX_SPEED)
 			speed = speed + 2;
+	}
+	
+	public void reverse()
+	{
+		if(speed > -MAX_SPEED)
+			speed = speed - 2;
 	}
 	
 	public void turnLeft()
