@@ -90,6 +90,16 @@ public class Car
 		return 1;
 	}
 	
+	public int getSpeed()
+	{
+		return speed;
+	}
+	
+	public int getAngle()
+	{
+		return speed;
+	}
+	
 	private double angle;
 	private int speed;
 	
