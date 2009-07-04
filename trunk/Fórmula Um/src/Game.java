@@ -76,20 +76,43 @@ public class Game extends GameCanvas implements Runnable
 		{
 			carSprite.setTransform(Sprite.TRANS_ROT270);
 		}
-		
+			
 		carSprite.setFrame(car.getFrame());
-		carSprite.move(car.returnDX(), - car.returnDY());
+		
+		if(checkCollision())
+		{
+			carSprite.move(car.returnDX(), - car.returnDY());
+		}
+				
 		layerManager.setViewWindow(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight(), getWidth(), getHeight());
+	}
+
+	private boolean checkCollision()
+	{
+		if(carSprite.collidesWith(bleacherLayer, true))
+		{
+			return false;
+		}
+		
+		if(carSprite.collidesWith(objectsLayer, true))
+		{
+			return false;
+		}
+		
+		return true;
 	}
 
 	private void loading()
 	{
 		layerManager = new LayerManager();
-
-		TiledLayer trackLayer = null;
-
+		
+		TiledLayer floorLayer = null;
+		
 		try
 		{
+			objectsLayer = new TiledLayer(TAM_OBJECTS, TAM_OBJECTS, Image.createImage("/elementos.png"), TAM_SPRITE_OBJECTS, TAM_SPRITE_OBJECTS);
+			floorLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
+			bleacherLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			trackLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			carSprite = new Sprite(Image.createImage("/carros.png"), TAM_SPRITE_CAR, TAM_SPRITE_CAR);
 		}
@@ -98,26 +121,73 @@ public class Game extends GameCanvas implements Runnable
 			exception.printStackTrace();
 		}
 
-		int[] track = { 25, 25, 25, 23, 23, 23, 23, 25, 25, 25,
-						25, 11,  5, 19, 19, 19, 19, 15, 12, 25,
-						22,  3, 17, 25, 25, 25, 25, 16,  4, 24,
-						22, 18, 25, 25, 25, 25, 25, 25, 18, 24,
-						22, 18, 25, 25, 25, 25, 25, 25, 18, 24,
-						22, 18, 25, 25, 25, 25, 25, 25, 18, 24,
-						22, 18, 25, 25, 25, 25, 25, 25, 18, 24,
-						22,  8, 12, 25, 25, 25, 25, 11,  9, 24,
-						25, 16, 10, 19, 19, 19, 19, 20, 17, 25,
-						25, 25, 25, 21, 21, 21, 21, 25, 25, 25};
+		int[] track = {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                 0, 11,  5, 19, 19, 19, 19, 15, 12,  0,
+						 0,  3, 17,  0,  0,  0,  0, 16,  4,  0,
+						 0, 18,  0,  0,  0,  0,  0,  0, 18,  0,
+						 0, 18,  0,  0,  0,  0,  0,  0, 18,  0,
+						 0, 18,  0,  0,  0,  0,  0,  0, 18,  0,
+						 0, 18,  0,  0,  0,  0,  0,  0, 18,  0,
+						 0,  8, 12,  0,  0,  0,  0, 11,  9,  0,
+						 0, 16, 10, 19, 19, 19, 19, 20, 17,  0,
+						 0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 
+		int[] objects =	{ 	2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  0,
+		               	  	2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  0,
+		                    2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  0};
+		
+		int[] bleacher = {  0,  0,  0, 23, 23, 23, 23,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    22, 0,  0,  0,  0,  0,  0,  0,  0, 24,
+		                    22, 0,  0,  0,  0,  0,  0,  0,  0, 24,
+		                    22, 0,  0,  0,  0,  0,  0,  0,  0, 24,
+		                    22, 0,  0,  0,  0,  0,  0,  0,  0, 24,
+		                    22, 0,  0,  0,  0,  0,  0,  0,  0, 24,
+		                    22, 0,  0,  0,  0,  0,  0,  0,  0, 24,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0, 21, 21, 21, 21,  0,  0,  0};
+		
+		int[] floor = {	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
+		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
+		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
+		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
+		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
+		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
+		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
+		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
+		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
+		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25};
+		
 		for (int i = 0; i < track.length; i++)
 		{
 			int column = i % TAM_TRACK;
 			int row = (i - column) / TAM_TRACK;
+		
 			trackLayer.setCell(column, row, track[i]);
+			bleacherLayer.setCell(column, row, bleacher[i]);
+			floorLayer.setCell(column, row, floor[i]);
 		}
 		
-		layerManager.append(carSprite);
+		for (int i = 0; i < objects.length; i++)
+		{
+			int column = i % TAM_OBJECTS;
+			int row = (i - column) / TAM_OBJECTS;
+
+			objectsLayer.setCell(column, row, objects[i]);
+		}
+		
+		layerManager.append(objectsLayer);
+		layerManager.append(bleacherLayer);
+//		layerManager.append(carSprite);
 		layerManager.append(trackLayer);
+		layerManager.append(floorLayer);
 		
 		carSprite.defineReferencePixel(carSprite.getWidth()/2,carSprite.getHeight()/2);
 		carSprite.setPosition(INITIAL_POSITION_X, INITIAL_POSITION_Y);
@@ -146,12 +216,14 @@ public class Game extends GameCanvas implements Runnable
 		}
 	}
 	
+	private final int TAM_OBJECTS = 15;
 	private final int TAM_TRACK = 10;
 	private final int TAM_SPRITE_TRACK = 150;
 	private final int TAM_SPRITE_CAR = 64;
 	private final int FRAME_DELAY = 33;
-	private static final int INITIAL_POSITION_X = 0;
-	private static final int INITIAL_POSITION_Y = 0;
+	private static final int INITIAL_POSITION_X = 750;
+	private static final int INITIAL_POSITION_Y = 750;
+	private static final int TAM_SPRITE_OBJECTS = 102;
 
 	private LayerManager layerManager;
 	private Display display;
@@ -160,4 +232,8 @@ public class Game extends GameCanvas implements Runnable
 	private int inputDelay;
 	
 	private Car car;
+	
+	private TiledLayer bleacherLayer = null;
+	private TiledLayer trackLayer = null;
+	private TiledLayer objectsLayer = null;
 }
