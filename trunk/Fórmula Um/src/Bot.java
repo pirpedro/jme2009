@@ -17,11 +17,7 @@ public class Bot extends Car
 	public void updateAll()
 	{
 		if(this.getSpeed() < 7)
-		this.speedUp();
-		
-		positionX = positionX + this.returnDX();
-		positionX = positionX + this.returnDY();
-		
+		this.speedUp();		
 	}
 	
 	public int getPositionX()
