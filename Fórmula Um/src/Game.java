@@ -43,6 +43,35 @@ public class Game extends GameCanvas implements Runnable
 	
 	private void update()
 	{
+		if(botOneSprite.collidesWith(turnLayer, true) )
+		{
+			if(!botOneCollided)
+			{
+				botOne.turnRight();
+				botOne.turnRight();
+				botOneCollided = true;
+			}
+		}
+		else
+		{
+			botOneCollided = false;
+		}
+		
+		if(botTwoSprite.collidesWith(turnLayer, true) )
+		{
+			if(!botTwoCollided)
+			{
+				botTwo.turnRight();
+				botTwo.turnRight();
+				botTwoCollided = true;
+			}
+		}
+		else
+		{
+			botTwoCollided = false;
+		}
+		
+		
 		if (++inputDelay > 2) 
 		{
 			int keyState = getKeyStates();
@@ -129,17 +158,17 @@ public class Game extends GameCanvas implements Runnable
 		carSprite.move(car.returnDX(), - car.returnDY());
 		carSprite.setFrame(car.getFrame());
 		
-		botOneSprite.setPosition(botOne.getPositionX(), botOne.getPositionY());
+		botOneSprite.move(botOne.returnDX(), - botOne.returnDY());
 		botOneSprite.setFrame(botOne.getFrame(1));
 		
-		botTwoSprite.setPosition(botTwo.getPositionX(), botTwo.getPositionY());
+		botTwoSprite.move(botTwo.returnDX(), - botTwo.returnDY());
 		botTwoSprite.setFrame(botTwo.getFrame(2));
 		
 		if(checkCollision())
 		{
 			carSprite.move(-car.returnDX(), car.returnDY());
 		}
-		System.out.println(carSprite.getX() + " " + carSprite.getY());
+		
 		layerManager.setViewWindow(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight(), getWidth(), getHeight());
 	}
 
@@ -176,6 +205,7 @@ public class Game extends GameCanvas implements Runnable
 		{
 			objectsLayer = new TiledLayer(TAM_OBJECTS, TAM_OBJECTS, Image.createImage("/elementos.png"), TAM_SPRITE_OBJECTS, TAM_SPRITE_OBJECTS);
 			floorLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
+			turnLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/turn.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			bleacherLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			trackLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			carSprite = new Sprite(Image.createImage("/carros.png"), TAM_SPRITE_CAR, TAM_SPRITE_CAR);
@@ -225,6 +255,17 @@ public class Game extends GameCanvas implements Runnable
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0, 21, 21, 21, 21,  0,  0,  0};
 		
+		int[] turn = {   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                 0,  0,  1,  0,  0,  0,  0,  1,  0,  0,
+		                 0,  1,  0,  0,  0,  0,  0,  0,  1,  1,
+	                     0,  0,  0,  0,  0,  0,  0,  0,  1,  0,
+	                     0,  0,  0,  0,  0,  0,  0,  0,  1,  0,
+	                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	                     0,  1,  0,  0,  0,  0,  0,  0,  1,  0,
+	                     0,  0,  1,  0,  0,  0,  0,  1,  0,  0,
+	                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
+		
 		int[] floor = {	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
 		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
 		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
@@ -244,6 +285,7 @@ public class Game extends GameCanvas implements Runnable
 			trackLayer.setCell(column, row, track[i]);
 			bleacherLayer.setCell(column, row, bleacher[i]);
 			floorLayer.setCell(column, row, floor[i]);
+			turnLayer.setCell(column, row, turn[i]);
 		}
 		
 		for (int i = 0; i < objects.length; i++)
@@ -261,6 +303,7 @@ public class Game extends GameCanvas implements Runnable
 		layerManager.append(carSprite);
 		layerManager.append(trackLayer);
 		layerManager.append(floorLayer);
+		layerManager.append(turnLayer);
 		
 		carSprite.defineReferencePixel(carSprite.getWidth()/2,carSprite.getHeight()/2);
 		
@@ -325,6 +368,10 @@ public class Game extends GameCanvas implements Runnable
 	private Bot botOne;
 	private Bot botTwo;
 	
+	private boolean botOneCollided;
+	private boolean botTwoCollided;
+	
+	private TiledLayer turnLayer = null;
 	private TiledLayer bleacherLayer = null;
 	private TiledLayer trackLayer = null;
 	private TiledLayer objectsLayer = null;
