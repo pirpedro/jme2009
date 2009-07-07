@@ -1,6 +1,7 @@
 import java.io.IOException;
 
 import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.game.GameCanvas;
@@ -190,9 +191,9 @@ public class Game extends GameCanvas implements Runnable
 		
 		try
 		{
-			largadaLayer = new TiledLayer(10, 10, Image.createImage("/largada.png"), 150, 150);
+			largadaLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/largada.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			barreiraLayer = new TiledLayer(33, 33, Image.createImage("/barreira.png"), 46, 46);
-			barreira2Layer = new TiledLayer(10, 10, Image.createImage("/barreira2.png"), 150, 150);
+			barreira2Layer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/barreira2.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			objectsLayer = new TiledLayer(TAM_OBJECTS, TAM_OBJECTS, Image.createImage("/elementos.png"), TAM_SPRITE_OBJECTS, TAM_SPRITE_OBJECTS);
 			floorLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			bleacherLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
@@ -366,12 +367,12 @@ public class Game extends GameCanvas implements Runnable
 		while (!sleeping)
 		{
 			update();
-
+			
 			car.update();
 			
-			//botOne.updateAll();
+			botOne.updateAll();
 			
-			//botTwo.updateAll();
+			botTwo.updateAll();
 			
 			draw(graphics);
 			
