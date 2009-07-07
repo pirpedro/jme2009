@@ -30,8 +30,8 @@ public class Game extends GameCanvas implements Runnable
 		thread.start();
 		
 		car = new Car(90);
-		botOne = new Bot(90, BOT_ONE_INITIAL_POSITION_X, BOT_ONE_INITIAL_POSITION_Y);
-		botTwo = new Bot(90, BOT_TWO_INITIAL_POSITION_X, BOT_TWO_INITIAL_POSITION_Y);
+		botOne = new Bot(90);
+		botTwo = new Bot(90);
 	}
 	
 	private void draw(Graphics graphics)
@@ -43,35 +43,6 @@ public class Game extends GameCanvas implements Runnable
 	
 	private void update()
 	{
-		if(botOneSprite.collidesWith(turnLayer, true) )
-		{
-			if(!botOneCollided)
-			{
-				botOne.turnRight();
-				botOne.turnRight();
-				botOneCollided = true;
-			}
-		}
-		else
-		{
-			botOneCollided = false;
-		}
-		
-		if(botTwoSprite.collidesWith(turnLayer, true) )
-		{
-			if(!botTwoCollided)
-			{
-				botTwo.turnRight();
-				botTwo.turnRight();
-				botTwoCollided = true;
-			}
-		}
-		else
-		{
-			botTwoCollided = false;
-		}
-		
-		
 		if (++inputDelay > 2) 
 		{
 			int keyState = getKeyStates();
@@ -79,6 +50,7 @@ public class Game extends GameCanvas implements Runnable
 			if ((keyState & LEFT_PRESSED) != 0)
 			{	
 				car.turnLeft();
+				System.out.println(carSprite.getX() + ", " + carSprite.getY() + ", 1,");
 				
 				if(checkCollision())
 				{
@@ -88,6 +60,7 @@ public class Game extends GameCanvas implements Runnable
 			else if ((keyState & RIGHT_PRESSED) != 0)
 			{			
 				car.turnRight();
+				System.out.println(carSprite.getX() + ", " + carSprite.getY() + ", 2,");
 				
 				if(checkCollision())
 				{
@@ -168,7 +141,7 @@ public class Game extends GameCanvas implements Runnable
 		{
 			carSprite.move(-car.returnDX(), car.returnDY());
 		}
-		
+		System.out.println(carSprite.getX() + ", " + carSprite.getY() + ", 0,");
 		layerManager.setViewWindow(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight(), getWidth(), getHeight());
 	}
 
@@ -205,7 +178,6 @@ public class Game extends GameCanvas implements Runnable
 		{
 			objectsLayer = new TiledLayer(TAM_OBJECTS, TAM_OBJECTS, Image.createImage("/elementos.png"), TAM_SPRITE_OBJECTS, TAM_SPRITE_OBJECTS);
 			floorLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
-			turnLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/turn.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			bleacherLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			trackLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			carSprite = new Sprite(Image.createImage("/carros.png"), TAM_SPRITE_CAR, TAM_SPRITE_CAR);
@@ -255,17 +227,6 @@ public class Game extends GameCanvas implements Runnable
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0, 21, 21, 21, 21,  0,  0,  0};
 		
-		int[] turn = {   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		                 0,  0,  1,  0,  0,  0,  0,  1,  0,  0,
-		                 0,  1,  0,  0,  0,  0,  0,  0,  1,  1,
-	                     0,  0,  0,  0,  0,  0,  0,  0,  1,  0,
-	                     0,  0,  0,  0,  0,  0,  0,  0,  1,  0,
-	                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-	                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-	                     0,  1,  0,  0,  0,  0,  0,  0,  1,  0,
-	                     0,  0,  1,  0,  0,  0,  0,  1,  0,  0,
-	                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
-		
 		int[] floor = {	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
 		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
 		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
@@ -285,7 +246,6 @@ public class Game extends GameCanvas implements Runnable
 			trackLayer.setCell(column, row, track[i]);
 			bleacherLayer.setCell(column, row, bleacher[i]);
 			floorLayer.setCell(column, row, floor[i]);
-			turnLayer.setCell(column, row, turn[i]);
 		}
 		
 		for (int i = 0; i < objects.length; i++)
@@ -303,15 +263,14 @@ public class Game extends GameCanvas implements Runnable
 		layerManager.append(carSprite);
 		layerManager.append(trackLayer);
 		layerManager.append(floorLayer);
-		layerManager.append(turnLayer);
 		
 		carSprite.defineReferencePixel(carSprite.getWidth()/2,carSprite.getHeight()/2);
 		
-		carSprite.setPosition(INITIAL_POSITION_X, INITIAL_POSITION_Y);
+		carSprite.setPosition(BOT_ONE_INITIAL_POSITION_X, BOT_ONE_INITIAL_POSITION_Y);
 		
-		botOneSprite.setPosition(BOT_ONE_INITIAL_POSITION_X, BOT_ONE_INITIAL_POSITION_Y);
+		botOneSprite.setPosition(750, 750);
 		
-		botTwoSprite.setPosition(BOT_TWO_INITIAL_POSITION_X, BOT_TWO_INITIAL_POSITION_Y);
+		botTwoSprite.setPosition(750, 750);
 	}
 
 	public void run()
@@ -368,11 +327,23 @@ public class Game extends GameCanvas implements Runnable
 	private Bot botOne;
 	private Bot botTwo;
 	
-	private boolean botOneCollided;
-	private boolean botTwoCollided;
-	
-	private TiledLayer turnLayer = null;
 	private TiledLayer bleacherLayer = null;
 	private TiledLayer trackLayer = null;
 	private TiledLayer objectsLayer = null;
+	
+	public double aTan2(double y, double x) {
+		double coeff_1 = Math.PI / 4d;
+		double coeff_2 = 3d * coeff_1;
+		double abs_y = Math.abs(y);
+		double angle;
+		if (x >= 0d) {
+			double r = (x - abs_y) / (x + abs_y);
+			angle = coeff_1 - coeff_1 * r;
+		} else {
+			double r = (x + abs_y) / (abs_y - x);
+			angle = coeff_2 - coeff_1 * r;
+		}
+		return y < 0d ? -angle : angle;
+	}
+
 }
