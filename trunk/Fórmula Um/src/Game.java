@@ -158,6 +158,11 @@ public class Game extends GameCanvas implements Runnable
 			return true;
 		}
 		
+		if(carSprite.collidesWith(barreira2Layer, true))
+		{
+			return true;
+		}
+		
 		if(carSprite.collidesWith(bleacherLayer, true))
 		{
 			return true;
@@ -185,7 +190,9 @@ public class Game extends GameCanvas implements Runnable
 		
 		try
 		{
+			largadaLayer = new TiledLayer(10, 10, Image.createImage("/largada.png"), 150, 150);
 			barreiraLayer = new TiledLayer(33, 33, Image.createImage("/barreira.png"), 46, 46);
+			barreira2Layer = new TiledLayer(10, 10, Image.createImage("/barreira2.png"), 150, 150);
 			objectsLayer = new TiledLayer(TAM_OBJECTS, TAM_OBJECTS, Image.createImage("/elementos.png"), TAM_SPRITE_OBJECTS, TAM_SPRITE_OBJECTS);
 			floorLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			bleacherLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
@@ -233,6 +240,27 @@ public class Game extends GameCanvas implements Runnable
 						 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 						 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 		
+		int[] largada = { 	 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  1,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0};	
+		
+		int[] barreira2 = {  0,  1,  1,  0,  0,  0,  0,  1,  1,  0,
+		                     4,  0,  0,  0,  0,  0,  0,  0,  0,  3,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                     4,  0,  0,  0,  0,  0,  0,  0,  0,  3,
+		                     0,  2,  2,  0,  0,  0,  0,  2,  2,  0};		
 		
 		int[] track = {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                 0, 11,  5, 19, 19, 19, 19, 15, 12,  0,
@@ -246,7 +274,7 @@ public class Game extends GameCanvas implements Runnable
 						 0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 
 		int[] objects =	{ 	2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  0,
-		               	  	2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  0,
+		               	  	2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -258,7 +286,7 @@ public class Game extends GameCanvas implements Runnable
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		                    2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  0,
+		                    2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  0,
 		                    2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  0};
 		
 		int[] bleacher = {  0,  0,  0, 23, 23, 23, 23,  0,  0,  0,
@@ -291,6 +319,8 @@ public class Game extends GameCanvas implements Runnable
 			trackLayer.setCell(column, row, track[i]);
 			bleacherLayer.setCell(column, row, bleacher[i]);
 			floorLayer.setCell(column, row, floor[i]);
+			barreira2Layer.setCell(column, row, barreira2[i]);
+			largadaLayer.setCell(column, row, largada[i]);
 		}
 		
 		for (int i = 0; i < objects.length; i++)
@@ -308,13 +338,15 @@ public class Game extends GameCanvas implements Runnable
 
 			barreiraLayer.setCell(column, row, barreira[i]);
 		}
-			
+		
+		layerManager.append(barreira2Layer);
 		layerManager.append(barreiraLayer);
 		layerManager.append(objectsLayer);
 		layerManager.append(bleacherLayer);
 		layerManager.append(botOneSprite);
 		layerManager.append(botTwoSprite);		
 		layerManager.append(carSprite);
+		layerManager.append(largadaLayer);
 		layerManager.append(trackLayer);
 		layerManager.append(floorLayer);
 		
@@ -337,9 +369,9 @@ public class Game extends GameCanvas implements Runnable
 
 			car.update();
 			
-			botOne.updateAll();
+			//botOne.updateAll();
 			
-			botTwo.updateAll();
+			//botTwo.updateAll();
 			
 			draw(graphics);
 			
@@ -362,11 +394,11 @@ public class Game extends GameCanvas implements Runnable
 	
 	private static final int FRAME_DELAY = 33;
 	
-	private static final int INITIAL_POSITION_X = 519;
-	private static final int INITIAL_POSITION_Y = 163;
-	private static final int BOT_ONE_INITIAL_POSITION_X = 670;
-	private static final int BOT_ONE_INITIAL_POSITION_Y = 170;	
-	private static final int BOT_TWO_INITIAL_POSITION_X = 585;
+	private static final int INITIAL_POSITION_X = 415;
+	private static final int INITIAL_POSITION_Y = 165;
+	private static final int BOT_ONE_INITIAL_POSITION_X = 575;
+	private static final int BOT_ONE_INITIAL_POSITION_Y = 165;	
+	private static final int BOT_TWO_INITIAL_POSITION_X = 550;
 	private static final int BOT_TWO_INITIAL_POSITION_Y = 220;
 	
 	private LayerManager layerManager;
@@ -381,7 +413,9 @@ public class Game extends GameCanvas implements Runnable
 	private Bot botOne;
 	private Bot botTwo;
 	
+	private TiledLayer largadaLayer = null;
 	private TiledLayer bleacherLayer = null;
+	private TiledLayer barreira2Layer = null;
 	private TiledLayer barreiraLayer = null;
 	private TiledLayer trackLayer = null;
 	private TiledLayer objectsLayer = null;
