@@ -50,7 +50,9 @@ public class Game extends GameCanvas implements Runnable
 			if ((keyState & LEFT_PRESSED) != 0)
 			{	
 				car.turnLeft();
-				System.out.println(carSprite.getX() + ", " + carSprite.getY() + ", 1,");
+				
+				//TODO
+				//System.out.println(carSprite.getX() + ", " + carSprite.getY() + ", 1,");
 				
 				if(checkCollision())
 				{
@@ -60,7 +62,8 @@ public class Game extends GameCanvas implements Runnable
 			else if ((keyState & RIGHT_PRESSED) != 0)
 			{			
 				car.turnRight();
-				System.out.println(carSprite.getX() + ", " + carSprite.getY() + ", 2,");
+				//TODO
+				//System.out.println(carSprite.getX() + ", " + carSprite.getY() + ", 2,");
 				
 				if(checkCollision())
 				{
@@ -141,12 +144,20 @@ public class Game extends GameCanvas implements Runnable
 		{
 			carSprite.move(-car.returnDX(), car.returnDY());
 		}
-		System.out.println(carSprite.getX() + ", " + carSprite.getY() + ", 0,");
+		
+		//TODO
+		//System.out.println(carSprite.getX() + ", " + carSprite.getY() + ", 0,");
+		
 		layerManager.setViewWindow(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight(), getWidth(), getHeight());
 	}
 
 	private boolean checkCollision()
 	{
+		if(carSprite.collidesWith(barreiraLayer, true))
+		{
+			return true;
+		}
+		
 		if(carSprite.collidesWith(bleacherLayer, true))
 		{
 			return true;
@@ -172,10 +183,9 @@ public class Game extends GameCanvas implements Runnable
 	{
 		layerManager = new LayerManager();
 		
-		TiledLayer floorLayer = null;
-		
 		try
 		{
+			barreiraLayer = new TiledLayer(33, 33, Image.createImage("/barreira.png"), 46, 46);
 			objectsLayer = new TiledLayer(TAM_OBJECTS, TAM_OBJECTS, Image.createImage("/elementos.png"), TAM_SPRITE_OBJECTS, TAM_SPRITE_OBJECTS);
 			floorLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			bleacherLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/pista.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
@@ -189,6 +199,41 @@ public class Game extends GameCanvas implements Runnable
 			exception.printStackTrace();
 		}
 
+		int[] barreira = {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  0,  0,  0,  0,  0,  0,  0,
+						 	0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+						 	0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+						 	0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+						 	0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+						 	0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+						 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+						 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+						 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+						 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+						 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
+		
+		
 		int[] track = {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                 0, 11,  5, 19, 19, 19, 19, 15, 12,  0,
 						 0,  3, 17,  0,  0,  0,  0, 16,  4,  0,
@@ -203,7 +248,7 @@ public class Game extends GameCanvas implements Runnable
 		int[] objects =	{ 	2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  0,
 		               	  	2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		                    0,  0,  0,  0,  0,  0,  1,  1,  1,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -227,16 +272,16 @@ public class Game extends GameCanvas implements Runnable
 		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                    0,  0,  0, 21, 21, 21, 21,  0,  0,  0};
 		
-		int[] floor = {	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
-		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
-		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
-		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
-		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
-		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
-		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
-		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
-		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
-		               	25, 25, 25, 25, 25, 25, 25, 25, 25, 25};
+		int[] floor = {	25, 25, 25,  0,  0,  0,  0, 25, 25, 25,
+		               	25,  0,  0,  0,  0,  0,  0,  0,  0, 25,
+		                 0,  0,  0, 25, 25, 25, 25,  0,  0,  0,
+		                 0,  0, 25, 25, 25, 25, 25, 25,  0,  0,
+		                 0,  0, 25, 25, 25, 25, 25, 25,  0,  0,
+		                 0,  0, 25, 25, 25, 25, 25, 25,  0,  0,
+		                 0,  0, 25, 25, 25, 25, 25, 25,  0,  0,
+		                 0,  0,  0, 25, 25, 25, 25,  0,  0,  0,
+		               	25,  0,  0,  0,  0,  0,  0,  0,  0, 25,
+		               	25, 25, 25,  0,  0,  0,  0, 25, 25, 25};
 		
 		for (int i = 0; i < track.length; i++)
 		{
@@ -255,7 +300,16 @@ public class Game extends GameCanvas implements Runnable
 
 			objectsLayer.setCell(column, row, objects[i]);
 		}
-				
+		
+		for (int i = 0; i < barreira.length; i++)
+		{
+			int column = i % 33;
+			int row = (i - column) / 33;
+
+			barreiraLayer.setCell(column, row, barreira[i]);
+		}
+			
+		layerManager.append(barreiraLayer);
 		layerManager.append(objectsLayer);
 		layerManager.append(bleacherLayer);
 		layerManager.append(botOneSprite);
@@ -266,11 +320,11 @@ public class Game extends GameCanvas implements Runnable
 		
 		carSprite.defineReferencePixel(carSprite.getWidth()/2,carSprite.getHeight()/2);
 		
-		carSprite.setPosition(BOT_ONE_INITIAL_POSITION_X, BOT_ONE_INITIAL_POSITION_Y);
+		carSprite.setPosition(INITIAL_POSITION_X, INITIAL_POSITION_Y);
 		
-		botOneSprite.setPosition(750, 750);
+		botOneSprite.setPosition(BOT_ONE_INITIAL_POSITION_X, BOT_ONE_INITIAL_POSITION_Y);
 		
-		botTwoSprite.setPosition(750, 750);
+		botTwoSprite.setPosition(BOT_TWO_INITIAL_POSITION_X, BOT_TWO_INITIAL_POSITION_Y);
 	}
 
 	public void run()
@@ -280,7 +334,7 @@ public class Game extends GameCanvas implements Runnable
 		while (!sleeping)
 		{
 			update();
-			
+
 			car.update();
 			
 			botOne.updateAll();
@@ -328,22 +382,8 @@ public class Game extends GameCanvas implements Runnable
 	private Bot botTwo;
 	
 	private TiledLayer bleacherLayer = null;
+	private TiledLayer barreiraLayer = null;
 	private TiledLayer trackLayer = null;
 	private TiledLayer objectsLayer = null;
-	
-	public double aTan2(double y, double x) {
-		double coeff_1 = Math.PI / 4d;
-		double coeff_2 = 3d * coeff_1;
-		double abs_y = Math.abs(y);
-		double angle;
-		if (x >= 0d) {
-			double r = (x - abs_y) / (x + abs_y);
-			angle = coeff_1 - coeff_1 * r;
-		} else {
-			double r = (x + abs_y) / (abs_y - x);
-			angle = coeff_2 - coeff_1 * r;
-		}
-		return y < 0d ? -angle : angle;
-	}
-
+	private TiledLayer floorLayer = null;
 }

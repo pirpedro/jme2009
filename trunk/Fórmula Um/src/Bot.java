@@ -4,6 +4,8 @@ public class Bot extends Car
 	public Bot(int angle)
 	{
 		super(angle);
+		
+		i = 0;
 	}
 	
 	public int getFrame(int botNumber)
@@ -14,7 +16,50 @@ public class Bot extends Car
 	public void updateAll()
 	{
 		if(this.getSpeed() < 7)
-		this.speedUp();		
+		this.speedUp();
+		
+		/*
+		if(position[i + 2] == 1)
+		{
+			this.turnRight();
+		}
+		else if(position[i + 2] == 2)
+		{
+			this.turnLeft();
+		}
+		
+		i = i + 3;*/
+	}
+	
+	public int getX()
+	{
+		return position[i];
+	}
+	
+	public int getY()
+	{
+		return position[i+1];
+	}
+	
+	public double aTan2(double y, double x) 
+	{
+		double coeff_1 = Math.PI / 4d;
+		double coeff_2 = 3d * coeff_1;
+		double abs_y = Math.abs(y);
+		double angle;
+		
+		if (x >= 0d) 
+		{
+			double r = (x - abs_y) / (x + abs_y);
+			angle = coeff_1 - coeff_1 * r;
+		} 
+		else 
+		{
+			double r = (x + abs_y) / (abs_y - x);
+			angle = coeff_2 - coeff_1 * r;
+		}
+		
+		return y < 0d ? -angle : angle;
 	}
 	
 	int[] position = {
@@ -1410,4 +1455,6 @@ public class Bot extends Car
 				1098, 198, 0,
 				1098, 198, 0,
 				1098, 198, 0};
+	
+	private static int i;
 }
