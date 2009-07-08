@@ -606,16 +606,15 @@ public class Game extends GameCanvas implements Runnable
 			{
 				if(botOne.wayPoint < 13 || botTwo.wayPoint < 13)
 				{
-					graphics.drawString("WINNER!", getWidth()/2, getHeight()/2, Graphics.TOP | Graphics.LEFT);
+					graphics.drawString("WINNER!", 90, 40, Graphics.TOP | Graphics.HCENTER);
 					System.out.println("WINNER!");
 				}
 				else
 				{
-					graphics.drawString("LOST!", getWidth()/2, getHeight()/2, Graphics.TOP | Graphics.RIGHT);
+					graphics.drawString("LOST!", 90, 40, Graphics.TOP | Graphics.HCENTER);
 					System.out.println("LOST!");
 				}
-				
-				draw(graphics);
+				flushGraphics();
 				
 				break;
 			}
