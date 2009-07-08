@@ -112,20 +112,189 @@ public class Car
 		return ((int) Math.floor((wayPoint-1)/4)) + 1;
 	}
 	
-	public int getPosition(int wayPoint2, int wayPoint3)
+	public int getPosition(int wayPoint2, int wayPoint3,int positionX,int positionY, int getOneX, int getOneY, int getTwoX,int getTwoY)
 	{
-		if(this.wayPoint >= wayPoint2 && this.wayPoint >= wayPoint3)
+		if(this.wayPoint == wayPoint2 && this.wayPoint > wayPoint3)
+		{
+			if((this.wayPoint%4) == 1)
+			{
+				if(positionX >= getOneX)
+					return 2;
+				else
+					return 3;
+			}
+			if((this.wayPoint%4) == 2)
+			{
+				if(positionY >= getOneY)
+					return 2;
+				else
+					return 3;
+			}
+			if((this.wayPoint%4) == 3)
+			{
+				if(positionX <= getOneX)
+					return 2;
+				else
+					return 3;
+			}
+			if((this.wayPoint%4) == 0)
+			{
+				if(positionY <= getOneY)
+					return 2;
+				else
+					return 3;
+			}
+		}
+		else if(this.wayPoint == wayPoint2 && this.wayPoint < wayPoint3)
+		{
+			if((this.wayPoint%4) == 1)
+			{
+				if(positionX >= getOneX)
+					return 1;
+				else
+					return 2;
+			}
+			if((this.wayPoint%4) == 2)
+			{
+				if(positionY >= getOneY)
+					return 1;
+				else
+					return 2;
+			}
+			if((this.wayPoint%4) == 3)
+			{
+				if(positionX <= getOneX)
+					return 1;
+				else
+					return 2;
+			}
+			if((this.wayPoint%4) == 0)
+			{
+				if(positionY <= getOneY)
+					return 1;
+				else
+					return 2;
+			}
+		}
+		if(this.wayPoint == wayPoint2 && this.wayPoint == wayPoint3)
+		{
+			if((this.wayPoint%4) == 1)
+			{
+				if(positionX >= getOneX && positionX >= getTwoX)
+					return 1;
+				if(positionX >= getOneX && positionX < getTwoX)
+					return 2;
+				if(positionX < getOneX && positionX >= getTwoX)
+					return 2;
+				else
+					return 3;
+			}
+			if((this.wayPoint%4) == 2)
+			{
+				if(positionY >= getOneY && positionY >= getTwoY)
+					return 1;
+				if(positionY >= getOneY && positionY < getTwoY)
+					return 2;
+				if(positionY < getOneY && positionY >= getTwoY)
+					return 2;
+				else
+					return 3;
+			}
+			if((this.wayPoint%4) == 3)
+			{
+				if(positionX <= getOneX && positionX <= getTwoX)
+					return 1;
+				if(positionX <= getOneX && positionX > getTwoX)
+					return 2;
+				if(positionX > getOneX && positionX <= getTwoX)
+					return 2;
+				else
+					return 3;
+			}
+			if((this.wayPoint%4) == 0)
+			{
+				if(positionY <= getOneY && positionY <= getTwoY)
+					return 1;
+				if(positionY <= getOneY && positionY > getTwoY)
+					return 2;
+				if(positionY > getOneY && positionY <= getTwoY)
+					return 2;
+				else
+					return 3;
+			}
+		}
+		if(this.wayPoint > wayPoint2 && this.wayPoint == wayPoint3)
+		{
+			if((this.wayPoint%4) == 1)
+			{
+				if(positionX >= getTwoX)
+					return 2;
+				else
+					return 3;
+			}
+			if((this.wayPoint%4) == 2)
+			{
+				if(positionY >= getTwoY)
+					return 2;
+				else
+					return 3;
+			}
+			if((this.wayPoint%4) == 3)
+			{
+				if(positionX <= getTwoX)
+					return 2;
+				else
+					return 3;
+			}
+			if((this.wayPoint%4) == 0)
+			{
+				if(positionY <= getTwoY)
+					return 2;
+				else
+					return 3;
+			}
+		}
+		if(this.wayPoint < wayPoint2 && this.wayPoint == wayPoint3)
+		{
+			if((this.wayPoint%4) == 1)
+			{
+				if(positionX >= getTwoX)
+					return 1;
+				else
+					return 2;
+			}
+			if((this.wayPoint%4) == 2)
+			{
+				if(positionY >= getTwoY)
+					return 1;
+				else
+					return 2;
+			}
+			if((this.wayPoint%4) == 3)
+			{
+				if(positionX <= getTwoX)
+					return 1;
+				else
+					return 2;
+			}
+			if((this.wayPoint%4) == 0)
+			{
+				if(positionY <= getTwoY)
+					return 1;
+				else
+					return 2;
+			}
+		}
+		else if(this.wayPoint > wayPoint2 && this.wayPoint > wayPoint3)
 		{
 			return 1;
-		}
-		else if ((this.wayPoint < wayPoint2 && this.wayPoint >= wayPoint3) || (this.wayPoint >= wayPoint2 && this.wayPoint < wayPoint3))
-		{
-			return 2;
 		}
 		else
 		{
 			return 3;
 		}
+		
+		return 3;
 	}
 	
 	private double angle;
