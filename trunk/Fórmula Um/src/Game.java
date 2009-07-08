@@ -606,7 +606,7 @@ public class Game extends GameCanvas implements Runnable
 			{
 				if(botOne.wayPoint < 13 || botTwo.wayPoint < 13)
 				{
-					graphics.drawString("WINNER!", getWidth()/2, getHeight()/2, Graphics.LEFT);
+					graphics.drawString("WINNER!", getWidth()/2, getHeight()/2, Graphics.TOP | Graphics.LEFT);
 					System.out.println("WINNER!");
 				}
 				else
@@ -615,7 +615,7 @@ public class Game extends GameCanvas implements Runnable
 					System.out.println("LOST!");
 				}
 				
-				flushGraphics();
+				draw(graphics);
 				
 				break;
 			}
