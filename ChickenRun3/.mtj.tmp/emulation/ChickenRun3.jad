@@ -1,0 +1,8 @@
+MIDlet-1: ChickenRun,/ChickenHead.png,midlets.HenwayMIDlet
+MIDlet-Jar-Size: 109918
+MIDlet-Jar-URL: ChickenRun.jar
+MIDlet-Name: ChickenRun MIDlet Suite
+MIDlet-Vendor: MIDlet Suite Vendor
+MIDlet-Version: 1.0.0
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.0
