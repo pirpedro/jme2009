@@ -349,8 +349,6 @@ public class Game extends GameCanvas implements Runnable
 		//System.out.println(carSprite.getX() + ", " + carSprite.getY() + ", 0,");
 		
 		layerManager.setViewWindow(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight(), getWidth(), getHeight());
-		
-		velocimetro.sprite.setPosition(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight());
 	}
 
 	private boolean checkCollision()
@@ -576,8 +574,6 @@ public class Game extends GameCanvas implements Runnable
 		botOneSprite.setPosition(BOT_ONE_INITIAL_POSITION_X, BOT_ONE_INITIAL_POSITION_Y);
 		
 		botTwoSprite.setPosition(BOT_TWO_INITIAL_POSITION_X, BOT_TWO_INITIAL_POSITION_Y);
-		
-		velocimetro.sprite.setPosition(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight());
 	}
 
 	public void run()
