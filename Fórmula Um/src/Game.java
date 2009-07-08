@@ -131,7 +131,63 @@ public class Game extends GameCanvas implements Runnable
 		{
 			botTwoSprite.setTransform(Sprite.TRANS_ROT270);
 		}
+		
+		
+		if(carSprite.collidesWith(wayPointsLayer, false))
+		{
+			int x = (int) Math.floor(carSprite.getX()/150);
+			int y =	(int) Math.floor(carSprite.getY()/150);
 			
+			if(x == 3 && y == 1)
+			{
+				if(car.wayPoint == 0 || car.wayPoint == 4 || car.wayPoint == 8 || car.wayPoint == 12)
+				{
+					if(!passouUmwayPoint)
+					{
+						car.wayPoint++;
+						passouUmwayPoint = true;
+					}
+				}
+			}
+			else if(x == 8 && y == 4)
+			{
+				if(car.wayPoint == 1 || car.wayPoint == 5 || car.wayPoint == 9)
+				{
+					if(!passouUmwayPoint)
+					{
+						car.wayPoint++;
+						passouUmwayPoint = true;
+					}
+				}
+			}
+			else if(x == 5 && y == 8)
+			{
+				if(car.wayPoint == 2 || car.wayPoint == 6 || car.wayPoint == 10)
+				{
+					if(!passouUmwayPoint)
+					{
+						car.wayPoint++;
+						passouUmwayPoint = true;
+					}
+				}
+			}
+			else if(x == 1 && y == 6)
+			{
+				if(car.wayPoint == 3 || car.wayPoint == 7 || car.wayPoint == 11)
+				{
+					if(!passouUmwayPoint)
+					{
+						car.wayPoint++;
+						passouUmwayPoint = true;
+					}
+				}
+			}
+		}
+		else
+		{
+			passouUmwayPoint = false;
+		}
+		
 		carSprite.move(car.returnDX(), - car.returnDY());
 		carSprite.setFrame(car.getFrame());
 		
@@ -191,6 +247,7 @@ public class Game extends GameCanvas implements Runnable
 		
 		try
 		{
+			wayPointsLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/turn.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			largadaLayer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/largada.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
 			barreiraLayer = new TiledLayer(33, 33, Image.createImage("/barreira.png"), 46, 46);
 			barreira2Layer = new TiledLayer(TAM_TRACK, TAM_TRACK, Image.createImage("/barreira2.png"), TAM_SPRITE_TRACK, TAM_SPRITE_TRACK);
@@ -240,6 +297,17 @@ public class Game extends GameCanvas implements Runnable
 						 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 						 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 						 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
+		
+		int[] wayPoints = {	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  1,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  1,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  1,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  1,  0,  0,  0,  0,
+		                    0,  0,  0,  0,  0,  0,  0,  0,  0,  0};	
 		
 		int[] largada = { 	 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		                     0,  0,  0,  1,  0,  0,  0,  0,  0,  0,
@@ -322,6 +390,7 @@ public class Game extends GameCanvas implements Runnable
 			floorLayer.setCell(column, row, floor[i]);
 			barreira2Layer.setCell(column, row, barreira2[i]);
 			largadaLayer.setCell(column, row, largada[i]);
+			wayPointsLayer.setCell(column, row, wayPoints[i]);
 		}
 		
 		for (int i = 0; i < objects.length; i++)
@@ -350,6 +419,7 @@ public class Game extends GameCanvas implements Runnable
 		layerManager.append(largadaLayer);
 		layerManager.append(trackLayer);
 		layerManager.append(floorLayer);
+		layerManager.append(wayPointsLayer);
 		
 		carSprite.defineReferencePixel(carSprite.getWidth()/2,carSprite.getHeight()/2);
 		
@@ -384,6 +454,11 @@ public class Game extends GameCanvas implements Runnable
 			{
 				exception.printStackTrace();
 			}
+			
+			if(car.wayPoint == 13)
+			{
+				break;
+			}
 		}
 	}
 	
@@ -414,6 +489,9 @@ public class Game extends GameCanvas implements Runnable
 	private Bot botOne;
 	private Bot botTwo;
 	
+	private boolean passouUmwayPoint = false;
+	
+	private TiledLayer wayPointsLayer = null;
 	private TiledLayer largadaLayer = null;
 	private TiledLayer bleacherLayer = null;
 	private TiledLayer barreira2Layer = null;
