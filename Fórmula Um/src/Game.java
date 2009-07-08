@@ -64,7 +64,7 @@ public class Game extends GameCanvas implements Runnable
 		
 		graphics.setColor(0x000000);
 		
-		graphics.drawString("POSITION: " + car.getPosition(botOne.wayPoint,botTwo.wayPoint) + "/3", getWidth(),getHeight(), graphics.BOTTOM | graphics.RIGHT);
+		graphics.drawString("POSITION: " + car.getPosition(botOne.wayPoint,botTwo.wayPoint) + "/3", getWidth(),getHeight(), Graphics.BOTTOM | Graphics.RIGHT);
 		
 		flushGraphics();
 	}
