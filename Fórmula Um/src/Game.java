@@ -41,6 +41,30 @@ public class Game extends GameCanvas implements Runnable
 		
 		velocimetro.drawVelocity(car.getSpeed());
 		
+		graphics.setColor(0x000000);
+		graphics.fillRect(49,0,getWidth(),15);
+		
+		graphics.setColor(0xffffff);
+		    
+		if(((int) Math.floor(car.getSpeed()*100/10)) == 100)
+		{
+			graphics.drawString("SPEED: " + ((int) Math.floor(car.getSpeed()*100/10)) + "mph", 45, 0, graphics.TOP | graphics.LEFT);
+		}
+		else if(((int) Math.floor(car.getSpeed()*100/10)) == 0)
+		{
+			graphics.drawString("SPEED:     " + ((int) Math.floor(car.getSpeed()*100/10)) + "mph", 45, 0, graphics.TOP | graphics.LEFT);
+		}
+		else
+		{
+			graphics.drawString("SPEED:   " + ((int) Math.floor(car.getSpeed()*100/10)) + "mph", 45, 0, graphics.TOP | graphics.LEFT);
+		}
+		
+		graphics.drawString("LAPS: " + car.getLap() + "/3", getWidth(), 0, graphics.TOP | graphics.RIGHT);
+		
+		graphics.setColor(0x000000);
+		
+		graphics.drawString("POSITION: " + car.getLap() + "/3", getWidth(),getHeight(), graphics.BOTTOM | graphics.RIGHT);
+		
 		flushGraphics();
 	}
 	
