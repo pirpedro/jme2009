@@ -39,6 +39,8 @@ public class Game extends GameCanvas implements Runnable
 	{
 		layerManager.paint(graphics, 0, 0);
 		
+		velocimetro.drawVelocity(car.getSpeed());
+		
 		flushGraphics();
 	}
 	
@@ -321,6 +323,8 @@ public class Game extends GameCanvas implements Runnable
 		//System.out.println(carSprite.getX() + ", " + carSprite.getY() + ", 0,");
 		
 		layerManager.setViewWindow(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight(), getWidth(), getHeight());
+		
+		velocimetro.sprite.setPosition(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight());
 	}
 
 	private boolean checkCollision()
@@ -524,6 +528,9 @@ public class Game extends GameCanvas implements Runnable
 			barreiraLayer.setCell(column, row, barreira[i]);
 		}
 		
+		velocimetro = new Velocimetro(getGraphics(), this);
+		
+		layerManager.append(velocimetro.sprite);
 		layerManager.append(barreira2Layer);
 		layerManager.append(barreiraLayer);
 		layerManager.append(objectsLayer);
@@ -543,6 +550,8 @@ public class Game extends GameCanvas implements Runnable
 		botOneSprite.setPosition(BOT_ONE_INITIAL_POSITION_X, BOT_ONE_INITIAL_POSITION_Y);
 		
 		botTwoSprite.setPosition(BOT_TWO_INITIAL_POSITION_X, BOT_TWO_INITIAL_POSITION_Y);
+		
+		velocimetro.sprite.setPosition(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight());
 	}
 
 	public void run()
@@ -608,6 +617,8 @@ public class Game extends GameCanvas implements Runnable
 	private Sprite botTwoSprite;
 	private boolean sleeping;
 	private int inputDelay;
+
+	private Velocimetro velocimetro;
 	
 	private Car car;
 	private Bot botOne;
