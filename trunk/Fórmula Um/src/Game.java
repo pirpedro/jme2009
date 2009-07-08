@@ -1,7 +1,6 @@
 import java.io.IOException;
 
 import javax.microedition.lcdui.Display;
-import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.game.GameCanvas;
@@ -31,8 +30,8 @@ public class Game extends GameCanvas implements Runnable
 		thread.start();
 		
 		car = new Car(90);
-		botOne = new Bot(90);
-		botTwo = new Bot(90);
+		botOne = new Bot(90,1);
+		botTwo = new Bot(90,2);
 	}
 	
 	private void draw(Graphics graphics)
@@ -50,18 +49,18 @@ public class Game extends GameCanvas implements Runnable
 		
 		if(speed == 100)
 		{
-			graphics.drawString("SPEED: " + ((int) Math.floor(car.getSpeed()*100/10)) + "mph", 45, 0, graphics.TOP | graphics.LEFT);
+			graphics.drawString("SPEED: " + ((int) Math.floor(car.getSpeed()*100/10)) + "mph", 45, 0, Graphics.TOP | Graphics.LEFT);
 		}
 		else if(speed == 0)
 		{
-			graphics.drawString("SPEED:     " + ((int) Math.floor(car.getSpeed()*100/10)) + "mph", 45, 0, graphics.TOP | graphics.LEFT);
+			graphics.drawString("SPEED:     " + ((int) Math.floor(car.getSpeed()*100/10)) + "mph", 45, 0, Graphics.TOP | Graphics.LEFT);
 		}
 		else
 		{
-			graphics.drawString("SPEED:   " + ((int) Math.floor(car.getSpeed()*100/10)) + "mph", 45, 0, graphics.TOP | graphics.LEFT);
+			graphics.drawString("SPEED:   " + ((int) Math.floor(car.getSpeed()*100/10)) + "mph", 45, 0, Graphics.TOP | Graphics.LEFT);
 		}
 		
-		graphics.drawString("LAPS: " + car.getLap() + "/3", getWidth(), 0, graphics.TOP | graphics.RIGHT);
+		graphics.drawString("LAPS: " + car.getLap() + "/3", getWidth(), 0, Graphics.TOP | Graphics.RIGHT);
 		
 		graphics.setColor(0x000000);
 		
@@ -334,10 +333,10 @@ public class Game extends GameCanvas implements Runnable
 		carSprite.move(car.returnDX(), - car.returnDY());
 		carSprite.setFrame(car.getFrame());
 		
-		botOneSprite.move(botOne.returnDX(), - botOne.returnDY());
+		botOneSprite.setPosition(botOne.getX(),botOne.getY());
 		botOneSprite.setFrame(botOne.getFrame(1));
 		
-		botTwoSprite.move(botTwo.returnDX(), - botTwo.returnDY());
+		botTwoSprite.setPosition(botTwo.getX(),botTwo.getY());
 		botTwoSprite.setFrame(botTwo.getFrame(2));
 		
 		if(checkCollision())
@@ -349,6 +348,7 @@ public class Game extends GameCanvas implements Runnable
 		//System.out.println(carSprite.getX() + ", " + carSprite.getY() + ", 0,");
 		
 		layerManager.setViewWindow(carSprite.getX()-carSprite.getWidth(), carSprite.getY()-carSprite.getHeight(), getWidth(), getHeight());
+		//layerManager.setViewWindow(botOneSprite.getX()-botOneSprite.getWidth(), botOneSprite.getY()-botOneSprite.getHeight(), getWidth(), getHeight());
 	}
 
 	private boolean checkCollision()
@@ -630,7 +630,7 @@ public class Game extends GameCanvas implements Runnable
 	private static final int INITIAL_POSITION_Y = 165;
 	private static final int BOT_ONE_INITIAL_POSITION_X = 575;
 	private static final int BOT_ONE_INITIAL_POSITION_Y = 165;	
-	private static final int BOT_TWO_INITIAL_POSITION_X = 550;
+	private static final int BOT_TWO_INITIAL_POSITION_X = 490;
 	private static final int BOT_TWO_INITIAL_POSITION_Y = 220;
 	
 	private LayerManager layerManager;
