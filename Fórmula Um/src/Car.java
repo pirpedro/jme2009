@@ -21,14 +21,20 @@ public class Car
 	
 	public void speedUp()
 	{
-		if(speed <= MAX_SPEED)
-			speed = speed + 3;
+		if(speed < MAX_SPEED)
+			speed = speed + 2;
+		
+		if(speed > MAX_SPEED)
+			speed = MAX_SPEED;
 	}
 	
 	public void reverse()
 	{
 		if(speed > -MAX_SPEED)
-			speed = speed - 3;
+			speed = speed - 2;
+		
+		if(speed < -MAX_SPEED)
+			speed = -MAX_SPEED;
 	}
 	
 	public void turnLeft()
@@ -106,10 +112,27 @@ public class Car
 		return ((int) Math.floor((wayPoint-1)/4)) + 1;
 	}
 	
+	public int getPosition(int wayPoint2, int wayPoint3)
+	{
+		if(this.wayPoint >= wayPoint2 && this.wayPoint >= wayPoint3)
+		{
+			return 1;
+		}
+		else if ((this.wayPoint < wayPoint2 && this.wayPoint >= wayPoint3) || (this.wayPoint >= wayPoint2 && this.wayPoint < wayPoint3))
+		{
+			return 2;
+		}
+		else
+		{
+			return 3;
+		}
+	}
+	
 	private double angle;
 	private int speed;
 	
-	private final int MAX_SPEED = 8;
+	private final int MAX_SPEED = 10;
 	public int wayPoint;
 	public boolean passouUmwayPoint = false;
+	
 }

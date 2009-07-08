@@ -23,7 +23,7 @@ public class Velocimetro extends GenericElement {
     /** Creates a new instance of Velocimetro */
     public Velocimetro(Graphics g, GameCanvas gCanvas) {
         super("/velocimetro2.png", g, gCanvas);
-        setRange(0, 8);
+        setRange(0, 10);
     }
 
     public void setDirecao(int direcao) {
