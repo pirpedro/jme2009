@@ -5,6 +5,7 @@ public class Car
 	{
 		this.angle = angle;
 		speed = 0;
+		wayPoint = 0;
 	}
 	
 	
@@ -100,8 +101,14 @@ public class Car
 		return speed;
 	}
 	
+	public int getLap()
+	{
+		return ((int) Math.floor((wayPoint-1)/4)) + 1;
+	}
+	
 	private double angle;
 	private int speed;
 	
 	private final int MAX_SPEED = 8;
+	public int wayPoint;
 }
