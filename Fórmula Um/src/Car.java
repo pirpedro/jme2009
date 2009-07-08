@@ -300,7 +300,7 @@ public class Car
 	private double angle;
 	private int speed;
 	
-	private final int MAX_SPEED = 10;
+	private final int MAX_SPEED = 12;
 	public int wayPoint;
 	public boolean passouUmwayPoint = false;
 	
