@@ -111,4 +111,5 @@ public class Car
 	
 	private final int MAX_SPEED = 8;
 	public int wayPoint;
+	public boolean passouUmwayPoint = false;
 }

@@ -42,6 +42,175 @@ public class Game extends GameCanvas implements Runnable
 		flushGraphics();
 	}
 	
+	private void updateLap()
+	{
+		if(carSprite.collidesWith(wayPointsLayer, false))
+		{
+			int x = (int) Math.floor(carSprite.getX()/150);
+			int y =	(int) Math.floor(carSprite.getY()/150);
+			
+			if(x == 3 && y == 1)
+			{
+				if(car.wayPoint == 0 || car.wayPoint == 4 || car.wayPoint == 8 || car.wayPoint == 12)
+				{
+					if(!car.passouUmwayPoint)
+					{
+						car.wayPoint++;
+						car.passouUmwayPoint = true;
+					}
+				}
+			}
+			else if(x == 8 && y == 4)
+			{
+				if(car.wayPoint == 1 || car.wayPoint == 5 || car.wayPoint == 9)
+				{
+					if(!car.passouUmwayPoint)
+					{
+						car.wayPoint++;
+						car.passouUmwayPoint = true;
+					}
+				}
+			}
+			else if(x == 5 && y == 8)
+			{
+				if(car.wayPoint == 2 || car.wayPoint == 6 || car.wayPoint == 10)
+				{
+					if(!car.passouUmwayPoint)
+					{
+						car.wayPoint++;
+						car.passouUmwayPoint = true;
+					}
+				}
+			}
+			else if(x == 1 && y == 6)
+			{
+				if(car.wayPoint == 3 || car.wayPoint == 7 || car.wayPoint == 11)
+				{
+					if(!car.passouUmwayPoint)
+					{
+						car.wayPoint++;
+						car.passouUmwayPoint = true;
+					}
+				}
+			}
+		}
+		else
+		{
+			car.passouUmwayPoint = false;
+		}
+		
+		if(botOneSprite.collidesWith(wayPointsLayer, true))
+		{
+			int x = (int) Math.floor(botOneSprite.getX()/150);
+			int y =	(int) Math.floor(botOneSprite.getY()/150);
+			
+			if(x == 3 && y == 1)
+			{
+				if(botOne.wayPoint == 0 || botOne.wayPoint == 4 || botOne.wayPoint == 8 || botOne.wayPoint == 12)
+				{
+					if(!botOne.passouUmwayPoint)
+					{
+						botOne.wayPoint++;
+						botOne.passouUmwayPoint = true;
+					}
+				}
+			}
+			else if(x == 8 && y == 4)
+			{
+				if(botOne.wayPoint == 1 || botOne.wayPoint == 5 || botOne.wayPoint == 9)
+				{
+					if(!botOne.passouUmwayPoint)
+					{
+						botOne.wayPoint++;
+						botOne.passouUmwayPoint = true;
+					}
+				}
+			}
+			else if(x == 5 && y == 8)
+			{
+				if(botOne.wayPoint == 2 || botOne.wayPoint == 6 || botOne.wayPoint == 10)
+				{
+					if(!botOne.passouUmwayPoint)
+					{
+						botOne.wayPoint++;
+						botOne.passouUmwayPoint = true;
+					}
+				}
+			}
+			else if(x == 1 && y == 6)
+			{
+				if(botOne.wayPoint == 3 || botOne.wayPoint == 7 || botOne.wayPoint == 11)
+				{
+					if(!botOne.passouUmwayPoint)
+					{
+						botOne.wayPoint++;
+						botOne.passouUmwayPoint = true;
+					}
+				}
+			}
+		}
+		else
+		{
+			botOne.passouUmwayPoint = false;
+		}
+		
+		if(botTwoSprite.collidesWith(wayPointsLayer, true))
+		{
+			int x = (int) Math.floor(botTwoSprite.getX()/150);
+			int y =	(int) Math.floor(botTwoSprite.getY()/150);
+			
+			if(x == 3 && y == 1)
+			{
+				if(botTwo.wayPoint == 0 || botTwo.wayPoint == 4 || botTwo.wayPoint == 8 || botTwo.wayPoint == 12)
+				{
+					if(!botTwo.passouUmwayPoint)
+					{
+						botTwo.wayPoint++;
+						botTwo.passouUmwayPoint = true;
+					}
+				}
+			}
+			else if(x == 8 && y == 4)
+			{
+				if(botTwo.wayPoint == 1 || botTwo.wayPoint == 5 || botTwo.wayPoint == 9)
+				{
+					if(!botTwo.passouUmwayPoint)
+					{
+						botTwo.wayPoint++;
+						botTwo.passouUmwayPoint = true;
+					}
+				}
+			}
+			else if(x == 5 && y == 8)
+			{
+				if(botTwo.wayPoint == 2 || botTwo.wayPoint == 6 || botTwo.wayPoint == 10)
+				{
+					if(!botTwo.passouUmwayPoint)
+					{
+						botTwo.wayPoint++;
+						botTwo.passouUmwayPoint = true;
+					}
+				}
+			}
+			else if(x == 1 && y == 6)
+			{
+				if(botTwo.wayPoint == 3 || botTwo.wayPoint == 7 || botTwo.wayPoint == 11)
+				{
+					if(!botTwo.passouUmwayPoint)
+					{
+						botTwo.wayPoint++;
+						botTwo.passouUmwayPoint = true;
+					}
+				}
+			}
+		}
+		else
+		{
+			botTwo.passouUmwayPoint = false;
+		}
+		
+	}
+	
 	private void update()
 	{
 		if (++inputDelay > 2) 
@@ -132,61 +301,7 @@ public class Game extends GameCanvas implements Runnable
 			botTwoSprite.setTransform(Sprite.TRANS_ROT270);
 		}
 		
-		
-		if(carSprite.collidesWith(wayPointsLayer, false))
-		{
-			int x = (int) Math.floor(carSprite.getX()/150);
-			int y =	(int) Math.floor(carSprite.getY()/150);
-			
-			if(x == 3 && y == 1)
-			{
-				if(car.wayPoint == 0 || car.wayPoint == 4 || car.wayPoint == 8 || car.wayPoint == 12)
-				{
-					if(!passouUmwayPoint)
-					{
-						car.wayPoint++;
-						passouUmwayPoint = true;
-					}
-				}
-			}
-			else if(x == 8 && y == 4)
-			{
-				if(car.wayPoint == 1 || car.wayPoint == 5 || car.wayPoint == 9)
-				{
-					if(!passouUmwayPoint)
-					{
-						car.wayPoint++;
-						passouUmwayPoint = true;
-					}
-				}
-			}
-			else if(x == 5 && y == 8)
-			{
-				if(car.wayPoint == 2 || car.wayPoint == 6 || car.wayPoint == 10)
-				{
-					if(!passouUmwayPoint)
-					{
-						car.wayPoint++;
-						passouUmwayPoint = true;
-					}
-				}
-			}
-			else if(x == 1 && y == 6)
-			{
-				if(car.wayPoint == 3 || car.wayPoint == 7 || car.wayPoint == 11)
-				{
-					if(!passouUmwayPoint)
-					{
-						car.wayPoint++;
-						passouUmwayPoint = true;
-					}
-				}
-			}
-		}
-		else
-		{
-			passouUmwayPoint = false;
-		}
+		updateLap();
 		
 		carSprite.move(car.returnDX(), - car.returnDY());
 		carSprite.setFrame(car.getFrame());
@@ -457,6 +572,15 @@ public class Game extends GameCanvas implements Runnable
 			
 			if(car.wayPoint == 13)
 			{
+				if(botOne.wayPoint < 13 || botTwo.wayPoint < 13)
+				{
+					System.out.println("WINNER!");
+				}
+				else
+				{
+					System.out.println("LOST!");
+				}
+				
 				break;
 			}
 		}
@@ -488,8 +612,6 @@ public class Game extends GameCanvas implements Runnable
 	private Car car;
 	private Bot botOne;
 	private Bot botTwo;
-	
-	private boolean passouUmwayPoint = false;
 	
 	private TiledLayer wayPointsLayer = null;
 	private TiledLayer largadaLayer = null;
