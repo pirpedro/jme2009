@@ -46,11 +46,13 @@ public class Game extends GameCanvas implements Runnable
 		
 		graphics.setColor(0xffffff);
 		    
-		if(((int) Math.floor(car.getSpeed()*100/10)) == 100)
+		int speed = Math.abs(((int) Math.floor(car.getSpeed()*100/10)));
+		
+		if(speed == 100)
 		{
 			graphics.drawString("SPEED: " + ((int) Math.floor(car.getSpeed()*100/10)) + "mph", 45, 0, graphics.TOP | graphics.LEFT);
 		}
-		else if(((int) Math.floor(car.getSpeed()*100/10)) == 0)
+		else if(speed == 0)
 		{
 			graphics.drawString("SPEED:     " + ((int) Math.floor(car.getSpeed()*100/10)) + "mph", 45, 0, graphics.TOP | graphics.LEFT);
 		}
@@ -63,7 +65,7 @@ public class Game extends GameCanvas implements Runnable
 		
 		graphics.setColor(0x000000);
 		
-		graphics.drawString("POSITION: " + car.getLap() + "/3", getWidth(),getHeight(), graphics.BOTTOM | graphics.RIGHT);
+		graphics.drawString("POSITION: " + car.getPosition(botOne.wayPoint,botTwo.wayPoint) + "/3", getWidth(),getHeight(), graphics.BOTTOM | graphics.RIGHT);
 		
 		flushGraphics();
 	}
@@ -584,9 +586,10 @@ public class Game extends GameCanvas implements Runnable
 
 		while (!sleeping)
 		{
-			update();
 			
 			car.update();
+
+			update();
 			
 			botOne.updateAll();
 			
