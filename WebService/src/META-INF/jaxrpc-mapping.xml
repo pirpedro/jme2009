@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java-wsdl-mapping xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee    http://www.ibm.com/webservices/xsd/j2ee_jaxrpc_mapping_1_1.xsd">
+  <package-mapping>
+    <package-type>br.ufrj.spemarti.webservice.entity</package-type>
+    <namespaceURI>http://webservice.spemarti.ufrj.br/</namespaceURI>
+  </package-mapping>
+  <java-xml-type-mapping>
+    <java-type>br.ufrj.spemarti.webservice.entity.SimpleInformationElement</java-type>
+    <root-type-qname xmlns:typeNS="http://webservice.spemarti.ufrj.br/">typeNS:simpleInformationElement</root-type-qname>
+    <qname-scope>complexType</qname-scope>
+    <variable-mapping>
+      <java-variable-name>annotation</java-variable-name>
+      <xml-element-name>annotation</xml-element-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>creationDate</java-variable-name>
+      <xml-element-name>creationDate</xml-element-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>id</java-variable-name>
+      <xml-element-name>id</xml-element-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>labelVersion</java-variable-name>
+      <xml-element-name>labelVersion</xml-element-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>nextVersion</java-variable-name>
+      <xml-element-name>nextVersion</xml-element-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>previousVersion</java-variable-name>
+      <xml-element-name>previousVersion</xml-element-name>
+    </variable-mapping>
+  </java-xml-type-mapping>
+  <java-xml-type-mapping>
+    <java-type>br.ufrj.spemarti.webservice.entity.Version</java-type>
+    <root-type-qname xmlns:typeNS="http://webservice.spemarti.ufrj.br/">typeNS:version</root-type-qname>
+    <qname-scope>complexType</qname-scope>
+    <variable-mapping>
+      <java-variable-name>annotation</java-variable-name>
+      <xml-element-name>annotation</xml-element-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>creationDate</java-variable-name>
+      <xml-element-name>creationDate</xml-element-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>id</java-variable-name>
+      <xml-element-name>id</xml-element-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>labelVersion</java-variable-name>
+      <xml-element-name>labelVersion</xml-element-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>nextVersion</java-variable-name>
+      <xml-element-name>nextVersion</xml-element-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>previousVersion</java-variable-name>
+      <xml-element-name>previousVersion</xml-element-name>
+    </variable-mapping>
+  </java-xml-type-mapping>
+  <service-interface-mapping>
+    <service-interface>br.ufrj.spemarti.webservice.entity.SvnBeanService</service-interface>
+    <wsdl-service-name xmlns:serviceNS="http://webservice.spemarti.ufrj.br/">serviceNS:SvnBeanService</wsdl-service-name>
+    <port-mapping>
+      <port-name>SvnBeanPort</port-name>
+      <java-port-name>SvnBeanPort</java-port-name>
+    </port-mapping>
+  </service-interface-mapping>
+  <service-endpoint-interface-mapping>
+    <service-endpoint-interface>br.ufrj.spemarti.webservice.entity.SvnBean</service-endpoint-interface>
+    <wsdl-port-type xmlns:portTypeNS="http://webservice.spemarti.ufrj.br/">portTypeNS:SvnBean</wsdl-port-type>
+    <wsdl-binding xmlns:bindingNS="http://webservice.spemarti.ufrj.br/">bindingNS:SvnBeanBinding</wsdl-binding>
+    <service-endpoint-method-mapping>
+      <java-method-name>checkIn</java-method-name>
+      <wsdl-operation>checkIn</wsdl-operation>
+      <method-param-parts-mapping>
+        <param-position>0</param-position>
+        <param-type>br.ufrj.spemarti.webservice.entity.SimpleInformationElement</param-type>
+        <wsdl-message-mapping>
+          <wsdl-message xmlns:wsdlMsgNS="http://webservice.spemarti.ufrj.br/">wsdlMsgNS:SvnBean_checkIn</wsdl-message>
+          <wsdl-message-part-name>arg0</wsdl-message-part-name>
+          <parameter-mode>IN</parameter-mode>
+        </wsdl-message-mapping>
+      </method-param-parts-mapping>
+      <method-param-parts-mapping>
+        <param-position>1</param-position>
+        <param-type>java.lang.String</param-type>
+        <wsdl-message-mapping>
+          <wsdl-message xmlns:wsdlMsgNS="http://webservice.spemarti.ufrj.br/">wsdlMsgNS:SvnBean_checkIn</wsdl-message>
+          <wsdl-message-part-name>arg1</wsdl-message-part-name>
+          <parameter-mode>IN</parameter-mode>
+        </wsdl-message-mapping>
+      </method-param-parts-mapping>
+    </service-endpoint-method-mapping>
+    <service-endpoint-method-mapping>
+      <java-method-name>echo</java-method-name>
+      <wsdl-operation>echo</wsdl-operation>
+      <method-param-parts-mapping>
+        <param-position>0</param-position>
+        <param-type>java.lang.String</param-type>
+        <wsdl-message-mapping>
+          <wsdl-message xmlns:wsdlMsgNS="http://webservice.spemarti.ufrj.br/">wsdlMsgNS:SvnBean_echo</wsdl-message>
+          <wsdl-message-part-name>arg0</wsdl-message-part-name>
+          <parameter-mode>IN</parameter-mode>
+        </wsdl-message-mapping>
+      </method-param-parts-mapping>
+      <wsdl-return-value-mapping>
+        <method-return-value>java.lang.String</method-return-value>
+        <wsdl-message xmlns:wsdlMsgNS="http://webservice.spemarti.ufrj.br/">wsdlMsgNS:SvnBean_echoResponse</wsdl-message>
+        <wsdl-message-part-name>return</wsdl-message-part-name>
+      </wsdl-return-value-mapping>
+    </service-endpoint-method-mapping>
+  </service-endpoint-interface-mapping>
+</java-wsdl-mapping>
