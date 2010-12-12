@@ -64,8 +64,6 @@ public abstract class Version implements Serializable{
 	@ManyToOne
 	private User user;
 	
-	@Transient
-	private Integer rootVersionId;
 	
 	
 	
@@ -174,13 +172,4 @@ public abstract class Version implements Serializable{
 	public int hashCode() {
 		return this.getId();
 	}
-
-	public void setRootVersionId(Integer rootVersionId) {
-		this.rootVersionId = rootVersionId;
-	}
-
-	public Integer getRootVersionId() {
-		return rootVersionId;
-	}
-
 }
