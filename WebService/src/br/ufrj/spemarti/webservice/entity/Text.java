@@ -14,7 +14,7 @@ public class Text extends SimpleInformationElement{
 	@Column
 	private String value;
 	
-	@ManyToOne
+	@ManyToOne(optional=true)
 	private Question question;
 
 	public void setValue(String value) {

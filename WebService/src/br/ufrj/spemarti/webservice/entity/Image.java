@@ -1,5 +1,6 @@
 package br.ufrj.spemarti.webservice.entity;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -12,6 +13,17 @@ public class Image extends SimpleInformationElement{
 	
 	@ManyToOne
 	private Diagram diagram;
+	
+	@Column
+	private String caption;
+	
+	@Column
+	private String path;
+	
+	public boolean createPath(String path){
+		this.path = path;
+		return true;
+	}
 
 	public void setDiagram(Diagram diagram) {
 		this.diagram = diagram;
@@ -43,6 +55,22 @@ public class Image extends SimpleInformationElement{
 	@Override
 	public int hashCode() {
 		return this.getId();
+	}
+
+	public void setCaption(String caption) {
+		this.caption = caption;
+	}
+
+	public String getCaption() {
+		return caption;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public String getPath() {
+		return path;
 	}
 
 }

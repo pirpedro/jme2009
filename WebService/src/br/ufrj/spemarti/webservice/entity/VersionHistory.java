@@ -87,10 +87,6 @@ public class VersionHistory implements Serializable{
 		return null;
 	}
 	
-	public void newVersion(FileElement fe){
-		getVersions().add(fe);
-	}
-	
 	public void setId(Integer id) {
 		this.id = id;
 	}

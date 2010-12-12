@@ -32,7 +32,7 @@ public class List extends ComplexInformationElement{
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	private java.util.List<SimpleInformationElement> contents = new ArrayList<SimpleInformationElement>();
 
-	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
+	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST, mappedBy="lines")
 	private java.util.List<Matrix> matrix = new ArrayList<Matrix>();
 
 
