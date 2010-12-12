@@ -4,7 +4,7 @@
 <!-- JBoss build file                                                       -->
 <!-- ======================================================================= -->
 
-<project name="JBoss" default="clientjar" basedir=".">
+<project name="SpemArti" default="clientjar" basedir=".">
 
   <property environment="env"/>
   <property name="src.dir" value="${basedir}/src/br/ufrj/spemarti/webservice"/>
@@ -12,6 +12,14 @@
   <property name="jboss.home" value="${env.JBOSS_HOME}"/>
   <property name="build.dir" value="${basedir}/build"/>
   <property name="build.classes.dir" value="${build.dir}/classes"/>
+	<property name="dir" value="." />
+	<property name="dir.bin" value="${dir}/bin" />
+	<property name="dir.lib" value="${dir}/lib" />
+	<property name="dir.src" value="${dir}/src" />
+	<property name="jboss.default" value="${jboss.home}/server/default" />
+	<property name="jboss.deploy" value="${jboss.default}/deploy" />
+	<property name="jboss.client" value="${jboss.home}/client" />
+	<property name="jboss.common.lib" value="${jboss.home}/common/lib" />	
 
   <!-- Build classpath -->
   <path id="classpath">
@@ -96,5 +104,39 @@
   </target>
 
 
+	<path id="jpatoolslib">
+			<pathelement location="${build}" />
+			<fileset dir="${jboss.common.lib}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${dir}/lib">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${jboss.client}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${jboss.home}/server/default/lib">
+				<include name="*.jar" />
+			</fileset>
+		</path>	
+	
+	<target name="hbm2ddl">
+			<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="jpatoolslib" />
+		
+			<hibernatetool destdir="${dir.src}">
+				
+				<classpath>
+					<!-- it is in this classpath you put your classes dir, and/or jpa persistence compliant jar -->
+					<path location="${dir.bin}" />
+				</classpath>
+		
+				<jpaconfiguration persistenceunit="titan" />
+		
+				<!-- list exporters here -->
+				<hbm2ddl export="false" outputfilename="db_schema.sql" />
+		
+			</hibernatetool>
+		</target>
+	
 </project>
 
