@@ -13,9 +13,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import br.ufrj.spemarti.webservice.entity.FileElement;
-import br.ufrj.spemarti.webservice.entity.FileSvn;
-import br.ufrj.spemarti.webservice.entity.OrderElement;
 import br.ufrj.spemarti.webservice.entity.SimpleInformationElement;
 import br.ufrj.spemarti.webservice.entity.User;
 import br.ufrj.spemarti.webservice.entity.Version;
@@ -42,13 +39,7 @@ public class SvnBean implements Svn{
 			versionHandler.commit(sie);
 		}
         
-        @WebMethod(operationName="checkInFileElement")
-        public void checkIn(FileElement fileElement){
-        	
-        	
-        }
-
-		@WebMethod
+        @WebMethod
 		public void createUser(String login, String password) {
 			if(recuperarUsuario(login)==null){
 				try{
@@ -123,19 +114,7 @@ public class SvnBean implements Svn{
 			
 			for(Version v : listaVersao){
 				
-				if(v instanceof FileElement){ //somente arquivos podem fazer parte da árvore primária do svn
-											  //mesmo que esses arquivos só contenham um SimpleInformationElement
-					FileElement fe = (FileElement)v;
-					VersionedExtent ve = new VersionedExtent();
-					ve.setAnnotation(v.getAnnotation());
-					ve.setBaseVersion(v);
-					ve.setSimpleInformationElementCount(fe.getElementList().size());
-					ve.setFileName(v.getVersionHistory().getFileName());
-					ve.setFolder(v.getVersionHistory().getFolder());
-					ve.setIsCheckedOut(false);
-					ve.setPath(v.getVersionHistory().getFilePath());
-					veg.getVersionedExtent().add(ve);
-				}
+				
 			
 			}
 			return veg;
@@ -166,28 +145,10 @@ public class SvnBean implements Svn{
 			}
 			
 			if(v!=null){
-				FileElement fe = (FileElement)v;
-				for(OrderElement order : fe.getElementList()){
-							
-					VersionedExtent ve = new VersionedExtent();
-					SimpleInformationElement sie = order.getSimpleInformationElement();
-					ve.setAnnotation(sie.getAnnotation());
-					ve.setBaseVersion(sie);
-					ve.setSimpleInformationElementCount(0);
-					ve.setFileName(sie.getVersionHistory().getFileName());
-					ve.setFolder(sie.getVersionHistory().getFolder());
-					ve.setIsCheckedOut(false);
-					ve.setPath(sie.getVersionHistory().getFilePath());
-					veg.getVersionedExtent().add(ve);
-					
-				}
+				
 			}
 			return veg;
 		}
 
-		@WebMethod
-		public FileSvn checkOut(Version version) {
-			return versionHandler.checkOut(version);
-			
-		}
+		
 }

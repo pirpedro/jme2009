@@ -8,14 +8,11 @@ import javax.persistence.Query;
 
 import br.ufrj.spemarti.webservice.entity.ComplexInformationElement;
 import br.ufrj.spemarti.webservice.entity.Diagram;
-import br.ufrj.spemarti.webservice.entity.FileElement;
-import br.ufrj.spemarti.webservice.entity.FileSvn;
 import br.ufrj.spemarti.webservice.entity.Image;
 import br.ufrj.spemarti.webservice.entity.List;
 import br.ufrj.spemarti.webservice.entity.Matrix;
 import br.ufrj.spemarti.webservice.entity.Question;
 import br.ufrj.spemarti.webservice.entity.SimpleInformationElement;
-import br.ufrj.spemarti.webservice.entity.Version;
 import br.ufrj.spemarti.webservice.entity.VersionHistory;
 
 @Stateless
@@ -83,16 +80,6 @@ public class VersionHandler implements IVersionHandler{
 		
 	}
 
-	public FileSvn checkOut(Version version) {
-		Version realVersion = em.find(Version.class, version.getId());
-		
-		if(realVersion instanceof FileElement){ //um fileElement não possui um arquivo, somente seus filhos.
-			return new FileSvn();
-		}else{
-			SimpleInformationElement sie = (SimpleInformationElement)realVersion;
-			return sie.getFile();
-		}
-		
-	}
+	
 	
 }

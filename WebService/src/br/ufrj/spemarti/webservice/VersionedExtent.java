@@ -2,7 +2,6 @@ package br.ufrj.spemarti.webservice;
 
 import java.io.Serializable;
 
-import br.ufrj.spemarti.webservice.entity.FileSvn;
 import br.ufrj.spemarti.webservice.entity.Version;
 
 public class VersionedExtent implements Serializable{
@@ -20,8 +19,6 @@ public class VersionedExtent implements Serializable{
 	private Version baseVersion;
 	
 	private Version previousVersion;
-	
-	private FileSvn file;
 	
 	private Integer simpleInformationElementCount;
 		
@@ -103,14 +100,6 @@ public class VersionedExtent implements Serializable{
 
 	public String getFolder() {
 		return folder;
-	}
-
-	public void setFile(FileSvn file) {
-		this.file = file;
-	}
-
-	public FileSvn getFile() {
-		return file;
 	}
 
 	public void setFileName(String fileName) {
