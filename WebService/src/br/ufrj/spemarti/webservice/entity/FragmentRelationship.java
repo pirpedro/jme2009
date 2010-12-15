@@ -12,6 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.ForceDiscriminator;
@@ -28,7 +31,9 @@ public abstract class FragmentRelationship implements Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
-	@OneToMany
+	@ManyToMany
+	@JoinTable(joinColumns={@JoinColumn(name="fragmentRelationship_id")},
+				inverseJoinColumns={@JoinColumn(name="fragment_id")})
 	private List<FragmentDefinition> containers = new ArrayList<FragmentDefinition>();
 
 	public void setContainers(List<FragmentDefinition> containers) {

@@ -16,7 +16,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-
 @Entity
 @NamedQueries({
 	@NamedQuery(name="VersionHistory.recuperarPorVersao",
@@ -24,7 +23,14 @@ import javax.persistence.OneToOne;
 	@NamedQuery(name="VersionHistory.recuperaAtivo",
 				query="SELECT distinct w.versionHistory FROM WorkProductDefinition w " +
 						"WHERE w.presentationName=:presentationName " +
-						"AND w.versionHistory.isDeleted = false")
+						"AND w.versionHistory.isDeleted = false"),
+	@NamedQuery(name="VersionHistory.recuperaAtivoArtifact",
+				query="SELECT distinct w.versionHistory FROM WorkProductDefinition w " +
+						"WHERE w.presentationName=:presentationName " +
+						"AND w.versionHistory.isDeleted = false " +
+						"AND w.versionHistory.fileName=:fileName " +
+						"AND w.versionHistory.filePath=:filePath " +
+						"AND w.versionHistory.folder=:folder")
 	
 })
 public class VersionHistory implements Serializable{
