@@ -9,12 +9,11 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import br.ufrj.spemarti.webservice.entity.SimpleInformationElement;
-import br.ufrj.spemarti.webservice.entity.User;
+import br.ufrj.spemarti.webservice.entity.ArtifactDefinition;
+import br.ufrj.spemarti.webservice.entity.FragmentDefinition;
 import br.ufrj.spemarti.webservice.entity.Version;
 
 @Stateless
@@ -26,74 +25,44 @@ public class SvnBean implements Svn{
 	private EntityManager em;
 	
 	@EJB
-	IVersionHandler versionHandler;
+	IFragmentHandler fragmentHandler;
+	
+	@EJB
+	IArtifactHandler artifactHandler;
+	
+	@EJB
+	IUserHandler userHandler;
 	
 		@WebMethod
         public String echo(String e) {
                 return "Web Service Echo + " + e;
         }
 
-        @WebMethod(operationName="checkInSimpleElement")
-		public void checkIn(SimpleInformationElement sie) {
+        @WebMethod(operationName="checkInFragment")
+		public Version checkIn(FragmentDefinition fragment, Integer userId) {
 			
-			versionHandler.commit(sie);
-		}
+			return fragmentHandler.commit(fragment, userId);
+			
+			
+        }
         
         @WebMethod
 		public void createUser(String login, String password) {
-			if(recuperarUsuario(login)==null){
-				try{
-					em.persist(new User(login, password));
-					em.flush();
-				}catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				
-			}
+			userHandler.createUser(login, password);
 			
 		}
 		
 		@WebMethod
 		public void removeUser(String login, String password){
-			User user = recuperarUsuario(login);
-			if(user!=null){
-				try{
-					if(user.getPassword().equals(password)){
-						em.remove(user);
-						em.flush();
-					}
-				}catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				
-			}
+			userHandler.removeUser(login, password);
 		}
 		
 		@WebMethod
 		public void updateUser(String login, String oldPass, String newPass){
-			User user = recuperarUsuario(login);
-			if(user!=null){
-				if(user.getPassword().equals(oldPass)){
-					user.setPassword(newPass);
-					em.merge(user);
-					em.flush();
-				}
-			}
+			userHandler.updateUser(login, oldPass, newPass);
 		}
 		
-		private User recuperarUsuario(String login){
-			Query query = em.createNamedQuery("User.recuperarPorLogin");
-			query.setParameter("login", login);
-			try{
-				return (User) query.getSingleResult();
-			}catch(NoResultException e){
-				return null;
-			}catch (Exception e) {
-				return null;
-			}
-		}
+		
 
 		/**
 		 * Recupera todos os elementos que pertencem a um caminho específico do svn.
@@ -148,6 +117,26 @@ public class SvnBean implements Svn{
 				
 			}
 			return veg;
+		}
+
+		@WebMethod(operationName="checkInArtifact")
+		public Version checkIn(ArtifactDefinition artifact,  Integer userId) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@WebMethod(operationName="checkInFragmentArtifact")
+		public Version checkIn(FragmentDefinition fragment,
+				ArtifactDefinition parent, Integer userId) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@WebMethod(operationName="checkInFragmentFragment")
+		public Version checkIn(FragmentDefinition parent,
+				FragmentDefinition fragment, Integer userId) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 		

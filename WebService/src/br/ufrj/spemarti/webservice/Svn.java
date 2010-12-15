@@ -2,15 +2,30 @@ package br.ufrj.spemarti.webservice;
 
 import java.rmi.Remote;
 
-import br.ufrj.spemarti.webservice.entity.SimpleInformationElement;
+import br.ufrj.spemarti.webservice.entity.ArtifactDefinition;
+import br.ufrj.spemarti.webservice.entity.FragmentDefinition;
+import br.ufrj.spemarti.webservice.entity.Version;
 
 @javax.ejb.Remote
 public interface Svn extends Remote {
         
 		String echo(String e);
         
-        void checkIn(SimpleInformationElement sie);
+		/**
+		 * 
+		 * commita um novo fragmento ou uma nova versão dele
+		 * 
+		 * @param fragment
+		 * @param userId
+		 * @return retorna o numero de revisão gerado para a nova versão do fragmento.
+		 */
+	    Version checkIn(FragmentDefinition fragment, Integer userId);
         
+	    Version checkIn(ArtifactDefinition artifact, Integer userId);
+	    Version checkIn(FragmentDefinition fragment, ArtifactDefinition parent, Integer userId);
+        
+	    Version checkIn(FragmentDefinition parent, FragmentDefinition fragment, Integer userId);
+               
         void createUser(String login, String password);
         void removeUser(String login, String password);
         void updateUser(String login, String oldPass, String newPass);
