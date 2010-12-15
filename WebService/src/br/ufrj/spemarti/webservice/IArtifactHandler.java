@@ -1,8 +1,11 @@
 package br.ufrj.spemarti.webservice;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import br.ufrj.spemarti.webservice.entity.ArtifactDefinition;
+import br.ufrj.spemarti.webservice.entity.ArtifactFragment_Relationship;
 import br.ufrj.spemarti.webservice.entity.FragmentDefinition;
 
 @Local
@@ -15,7 +18,7 @@ public interface IArtifactHandler {
 	 * @param idUsuario
 	 * @return
 	 */
-	ArtifactDefinition commit(ArtifactDefinition fragment, Integer idUsuario);
+	ArtifactDefinition commit(ArtifactDefinition artifact, String filePath, String folder, String fileName,Integer idUsuario);
 	
 	/**
 	 * 
@@ -46,5 +49,7 @@ public interface IArtifactHandler {
 	 * @return
 	 */
 	boolean remove(ArtifactDefinition parent, String presentationName, Integer idUsuario);
+	
+	List<ArtifactFragment_Relationship> recuperarRelacionamentosArtefato(Integer idArtefato);
 
 }

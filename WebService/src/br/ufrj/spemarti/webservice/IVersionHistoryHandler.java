@@ -16,4 +16,10 @@ public interface IVersionHistoryHandler {
 	
 	VersionHistory recuperaVersionHistoryAtivo(String presentationName);
 	
+	boolean verificaExistenciaVersionamentoAtivoArtifact(String presentationName, String filePath, String folder, String fileName);
+	
+	VersionHistory recuperaVersionHistoryAtivoArtifact(String presentationName, String filePath, String folder, String fileName);
+
+		
+	
 }

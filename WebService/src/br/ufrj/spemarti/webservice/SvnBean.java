@@ -14,6 +14,7 @@ import javax.persistence.Query;
 
 import br.ufrj.spemarti.webservice.entity.ArtifactDefinition;
 import br.ufrj.spemarti.webservice.entity.FragmentDefinition;
+import br.ufrj.spemarti.webservice.entity.OperationType;
 import br.ufrj.spemarti.webservice.entity.Version;
 
 @Stateless
@@ -120,21 +121,19 @@ public class SvnBean implements Svn{
 		}
 
 		@WebMethod(operationName="checkInArtifact")
-		public Version checkIn(ArtifactDefinition artifact,  Integer userId) {
-			// TODO Auto-generated method stub
-			return null;
+		public Version checkIn(ArtifactDefinition artifact, String filePath, String folder, String fileName, Integer userId) {
+			return artifactHandler.commit(artifact, filePath, folder, fileName, userId);
+			
 		}
 
 		@WebMethod(operationName="checkInFragmentArtifact")
-		public Version checkIn(FragmentDefinition fragment,
-				ArtifactDefinition parent, Integer userId) {
+		public Version checkIn(FragmentDefinition fragment,	ArtifactDefinition parent, Integer userId) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@WebMethod(operationName="checkInFragmentFragment")
-		public Version checkIn(FragmentDefinition parent,
-				FragmentDefinition fragment, Integer userId) {
+		public Version checkIn(FragmentDefinition parent, FragmentDefinition fragment, Integer userId) {
 			// TODO Auto-generated method stub
 			return null;
 		}

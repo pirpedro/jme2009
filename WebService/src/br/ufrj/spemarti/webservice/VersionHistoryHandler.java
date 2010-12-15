@@ -24,6 +24,20 @@ public class VersionHistoryHandler implements IVersionHistoryHandler{
 		return (VersionHistory) query.getSingleResult();
 	}
 	
+	public boolean verificaExistenciaVersionamentoAtivoArtifact(String presentationName, String filePath, String folder, String fileName) {
+		
+		return recuperaVersionHistoryAtivoArtifact(presentationName, filePath, folder, fileName)!=null;
+	}
+
+	public VersionHistory recuperaVersionHistoryAtivoArtifact(String presentationName, String filePath, String folder, String fileName) {
+		Query query = em.createNamedQuery("VersionHistory.recuperaAtivoArtifact");
+		query.setParameter("presentationName", presentationName);
+		query.setParameter("filePath", filePath);
+		query.setParameter("folder", folder);
+		query.setParameter("fileName", fileName);
+		return (VersionHistory) query.getSingleResult();
+	}
+	
 	
 
 }

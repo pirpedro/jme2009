@@ -21,7 +21,7 @@ public interface Svn extends Remote {
 		 */
 	    Version checkIn(FragmentDefinition fragment, Integer userId);
         
-	    Version checkIn(ArtifactDefinition artifact, Integer userId);
+	    Version checkIn(ArtifactDefinition artifact, String filePath, String folder, String fileName, Integer userId);
 	    Version checkIn(FragmentDefinition fragment, ArtifactDefinition parent, Integer userId);
         
 	    Version checkIn(FragmentDefinition parent, FragmentDefinition fragment, Integer userId);
