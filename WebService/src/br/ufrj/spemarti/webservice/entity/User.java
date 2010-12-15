@@ -12,7 +12,7 @@ import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="User.recuperarPorLoginSenha",
+	@NamedQuery(name="User.recuperarPorLogin",
 			query="SELECT u FROM User u WHERE u.login=:login")
 	
 })

@@ -3,7 +3,6 @@ package br.ufrj.spemarti.webservice.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +14,7 @@ public class Diagram extends ComplexInformationElement{
 
 	private static final long serialVersionUID = -468398977939294620L;
 	
-	@OneToMany(fetch=FetchType.LAZY, cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="diagram")
+	@OneToMany(fetch=FetchType.LAZY, cascade={}, mappedBy="diagram")
 	private List<Image> listaImagem = new ArrayList<Image>();
 
 	public void setListaImagem(List<Image> listaImagem) {

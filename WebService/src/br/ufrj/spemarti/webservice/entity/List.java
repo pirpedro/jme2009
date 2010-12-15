@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -32,7 +34,9 @@ public class List extends ComplexInformationElement{
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	private java.util.List<SimpleInformationElement> contents = new ArrayList<SimpleInformationElement>();
 
-	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST, mappedBy="lines")
+	@ManyToMany(fetch=FetchType.LAZY, cascade={})
+	@JoinTable(joinColumns={@JoinColumn(name="list_id")}, 
+			    inverseJoinColumns={@JoinColumn(name="matrix_id")})
 	private java.util.List<Matrix> matrix = new ArrayList<Matrix>();
 
 

@@ -16,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.ForceDiscriminator;
 

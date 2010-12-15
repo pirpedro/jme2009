@@ -19,9 +19,7 @@ public class Matrix extends ComplexInformationElement{
 
 	private static final long serialVersionUID = -5156679932082919173L;
 	
-	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
-	@JoinTable(joinColumns={@JoinColumn(name="matrix_id")}, 
-			    inverseJoinColumns={@JoinColumn(name="list_id")})
+	@ManyToMany(fetch=FetchType.LAZY, cascade={}, mappedBy="matrix")
 	private List<br.ufrj.spemarti.webservice.entity.List> lines = new ArrayList<br.ufrj.spemarti.webservice.entity.List>();
 
 	@ManyToOne

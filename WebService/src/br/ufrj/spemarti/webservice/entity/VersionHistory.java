@@ -20,7 +20,11 @@ import javax.persistence.OneToOne;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="VersionHistory.recuperarPorVersao",
-				query="SELECT v.versionHistory FROM Version v WHERE v.id=:id")
+				query="SELECT v.versionHistory FROM Version v WHERE v.id=:id"),
+	@NamedQuery(name="VersionHistory.recuperaAtivo",
+				query="SELECT distinct w.versionHistory FROM WorkProductDefinition w " +
+						"WHERE w.presentationName=:presentationName " +
+						"AND w.versionHistory.isDeleted = false")
 	
 })
 public class VersionHistory implements Serializable{
@@ -73,9 +77,9 @@ public class VersionHistory implements Serializable{
 		return null;
 	}
 	
-	public Version lookupByRevision(Integer versionId){
+	public Version lookupByRevision(Integer revision){
 		for(Version v : getVersions()){
-			if(v.getId().equals(versionId)){
+			if(v.getRevision().equals(revision)){
 				return v;
 			}
 		}
@@ -83,7 +87,10 @@ public class VersionHistory implements Serializable{
 		return null;
 	}
 	
-	public Version newVersion(SimpleInformationElement sie){
+	public Integer generateNewRevisionNumber(){
+		if(rootVersion!=null){
+			return rootVersion.getRevision()+1;
+		}
 		return null;
 	}
 	

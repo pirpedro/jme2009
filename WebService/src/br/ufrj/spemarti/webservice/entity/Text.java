@@ -3,6 +3,8 @@ package br.ufrj.spemarti.webservice.entity;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -16,6 +18,10 @@ public class Text extends SimpleInformationElement{
 	
 	@ManyToOne(optional=true)
 	private Question question;
+	
+	@Column
+	@Enumerated(value=EnumType.STRING)
+	private TextType textType;
 
 	public void setValue(String value) {
 		this.value = value;
@@ -55,6 +61,14 @@ public class Text extends SimpleInformationElement{
 	@Override
 	public int hashCode() {
 		return this.getId();
+	}
+
+	public void setTextType(TextType textType) {
+		this.textType = textType;
+	}
+
+	public TextType getTextType() {
+		return textType;
 	}
 	
 }

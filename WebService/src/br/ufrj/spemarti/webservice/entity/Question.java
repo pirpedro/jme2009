@@ -15,26 +15,29 @@ public class Question extends ComplexInformationElement{
 
 	private static final long serialVersionUID = -1746403931744068455L;
 
-	@OneToMany(fetch=FetchType.LAZY, cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="question")
-	private List<Text> answers = new ArrayList<Text>();
+	@OneToMany(fetch=FetchType.LAZY, cascade={CascadeType.REMOVE}, mappedBy="question")
+	private List<Text> texts = new ArrayList<Text>();
 	
-	@OneToMany(fetch=FetchType.LAZY, cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="question")
-	private List<Text> asks = new ArrayList<Text>();
-
-	public void setAnswers(List<Text> answers) {
-		this.answers = answers;
+	public List<Text> getAsks(){
+		List<Text> listText = new ArrayList<Text>();
+		for(Text text : getTexts()){
+			if(text.getTextType().equals(TextType.ASK)){
+				listText.add(text);
+			}
+		}
+		
+		return listText;
 	}
-
-	public List<Text> getAnswers() {
-		return answers;
-	}
-
-	public void setAsks(List<Text> asks) {
-		this.asks = asks;
-	}
-
-	public List<Text> getAsks() {
-		return asks;
+	
+	public List<Text> getAnswers(){
+		List<Text> listText = new ArrayList<Text>();
+		for(Text text : getTexts()){
+			if(text.getTextType().equals(TextType.ANSWER)){
+				listText.add(text);
+			}
+		}
+		
+		return listText;
 	}
 	
 	@Override
@@ -59,6 +62,14 @@ public class Question extends ComplexInformationElement{
 	@Override
 	public int hashCode() {
 		return this.getId();
+	}
+
+	public void setTexts(List<Text> texts) {
+		this.texts = texts;
+	}
+
+	public List<Text> getTexts() {
+		return texts;
 	}
 	
 }
