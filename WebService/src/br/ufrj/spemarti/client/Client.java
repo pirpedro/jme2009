@@ -8,8 +8,9 @@ import javax.rmi.PortableRemoteObject;
 
 import br.ufrj.spemarti.webservice.Svn;
 import br.ufrj.spemarti.webservice.entity.Diagram;
+import br.ufrj.spemarti.webservice.entity.FragmentDefinition;
 import br.ufrj.spemarti.webservice.entity.Image;
-import br.ufrj.spemarti.webservice.entity.SimpleInformationElement;
+import br.ufrj.spemarti.webservice.entity.Question;
 
 
 public class Client {
@@ -19,11 +20,11 @@ public class Client {
     	Object ref = jndiContext.lookup("SvnBean/remote");
     	Svn dao = (Svn)PortableRemoteObject.narrow(ref, Svn.class);
     	
-    	SimpleInformationElement sie = geraNovoDiagrama();
-    	
-    	dao.checkIn(sie);
-    	
-    	
+        FragmentDefinition fragment = new Question();
+        fragment.setPresentationName("testeFragmento");
+       
+    	dao.createUser("pedro", "pedro");
+    	dao.checkIn(fragment, 1);
     /*	System.out.println("Starting Test Client");
         URL url = new URL("http://localhost:8080/svn/SvnBean?wsdl");
         QName qname = new QName(
