@@ -14,8 +14,8 @@ import javax.persistence.Query;
 
 import br.ufrj.spemarti.webservice.entity.ArtifactDefinition;
 import br.ufrj.spemarti.webservice.entity.FragmentDefinition;
-import br.ufrj.spemarti.webservice.entity.OperationType;
 import br.ufrj.spemarti.webservice.entity.Version;
+import br.ufrj.spemarti.webservice.entity.VersionHistory;
 
 @Stateless
 @WebService
@@ -33,6 +33,9 @@ public class SvnBean implements Svn{
 	
 	@EJB
 	IUserHandler userHandler;
+	
+	@EJB
+	IVersionHistoryHandler vhHandler;
 	
 		@WebMethod
         public String echo(String e) {
@@ -136,6 +139,19 @@ public class SvnBean implements Svn{
 		public Version checkIn(FragmentDefinition parent, FragmentDefinition fragment, Integer userId) {
 			// TODO Auto-generated method stub
 			return null;
+		}
+
+		@WebMethod(operationName="removeWorkProduct")
+		public boolean remove(String presentationName, Integer userId) {
+			VersionHistory vh = vhHandler.recuperaVersionHistoryAtivo(presentationName);
+			
+			//se o elemento for um artefato
+			if(Utils.isArtifactInstance(vh.getRootVersion())){
+				return artifactHandler.remove(presentationName, userId);
+			}else{
+				return fragmentHandler.remove(presentationName, userId);
+			}
+			
 		}
 
 		

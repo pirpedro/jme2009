@@ -121,6 +121,10 @@ public class ArtifactHandler implements IArtifactHandler{
 		
 		//para deletar um artefato é apenas necessário deletar seu histórico.
 		VersionHistory vh = vhHandler.recuperaVersionHistoryAtivo(presentationName);
+		if(vh==null){
+			throw new RuntimeException("Não existe artefato versinado com o nome "+ presentationName);
+		}
+		
 		vh.setIsDeleted(true);
 		try{
 			em.merge(vh);

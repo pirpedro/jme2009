@@ -25,6 +25,8 @@ public interface Svn extends Remote {
 	    Version checkIn(FragmentDefinition fragment, ArtifactDefinition parent, Integer userId);
         
 	    Version checkIn(FragmentDefinition parent, FragmentDefinition fragment, Integer userId);
+	    
+	    boolean remove(String presentationName, Integer userId);
                
         void createUser(String login, String password);
         void removeUser(String login, String password);

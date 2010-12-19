@@ -27,7 +27,7 @@ public class FragmentHandler implements IFragmentHandler{
 		
 		User user = userHandler.recuperarPorId(idUsuario);
 		if(user==null){
-			return null;
+			throw new RuntimeException("Não foi informado o usuário que commitou o arquivo");
 		}
 		
 		//caso o fragmento já esteja sendo versionado
@@ -65,7 +65,12 @@ public class FragmentHandler implements IFragmentHandler{
 		//recuperamos o historico do fragmento.
 		VersionHistory vh = vhHandler.recuperaVersionHistoryAtivo(fragment.getPresentationName());
 		if(vh==null){
-			return null;
+			throw new RuntimeException("Não foi possível recuperar o histórico do fragmento " + fragment.getPresentationName());
+		}
+		
+		//o fragmento que vem para ser modificado deve conter o numero de revisão de sua versão anterior para comparação.
+		if(vh.getRootVersion().getRevision()!= fragment.getRevision()){
+			throw new RuntimeException("Fragmento não sincronizado com o svn.");
 		}
 		
 		fragment.setCreationDate(new Date());
@@ -78,12 +83,9 @@ public class FragmentHandler implements IFragmentHandler{
 		try{
 			em.persist(fragment);
 			em.merge(vh);
-		
-		//TODO alterar todos os artefatos que contem este fragmento.
-		
 			em.flush();
 		}catch (Exception e) {
-			return null;
+			throw new RuntimeException("Erro ao modificar o fragmento" + fragment.getPresentationName(), e);
 		}	
 		return fragment;
 		
@@ -144,8 +146,20 @@ public class FragmentHandler implements IFragmentHandler{
 	}
 
 	public boolean remove(String presentationName, Integer idUsuario) {
-		// TODO Auto-generated method stub
-		return false;
+		//para deletar um fragmento é apenas necessário deletar seu histórico.
+		VersionHistory vh = vhHandler.recuperaVersionHistoryAtivo(presentationName);
+		if(vh==null){
+			throw new RuntimeException("Não existe fragmento versinado com o nome "+ presentationName);
+		}
+		
+		vh.setIsDeleted(true);
+		try{
+			em.merge(vh);
+			em.flush();
+		}catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 	public boolean remove(FragmentDefinition parent, String presentationName,
