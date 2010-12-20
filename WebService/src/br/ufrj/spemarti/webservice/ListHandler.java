@@ -15,7 +15,7 @@ public class ListHandler implements IListHandler{
 	private EntityManager em;
 	
 	public boolean associate(List parent, FragmentDefinition fragment) {
-		if(! Utils.isSimpleInformationInstance(fragment)){
+		if(! Utils.isFragmentInstance(fragment)){
 			throw new RuntimeException("Não foi possível associar os artefatos.");
 		
 		}else{

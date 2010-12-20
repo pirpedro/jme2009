@@ -17,16 +17,16 @@ public class QuestionHandler implements IQuestionHandler{
 	
 	public boolean associate(Question parent, FragmentDefinition fragment) {
 		
-		if( ! ( (fragment instanceof Text) && (fragment instanceof LabeledText ) ) ){
+		if( ! ( (fragment instanceof Text) || (fragment instanceof LabeledText ) ) ){
 			throw new RuntimeException("Não é possível associar os artefatos.");
 		
 		}else{
 			
 			try{
-				Text txt = (Text) fragment;
-				parent.getTexts().add(txt);
-				txt.setQuestion(parent);
-				em.merge(parent);
+				
+				parent.getTexts().add((Text) fragment);
+				((Text)fragment).setQuestion(parent);
+				em.merge(fragment);
 			}catch (Exception e) {
 				throw new RuntimeException();
 			}

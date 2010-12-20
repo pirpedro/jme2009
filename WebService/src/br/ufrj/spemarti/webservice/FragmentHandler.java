@@ -15,6 +15,7 @@ import br.ufrj.spemarti.webservice.entity.Matrix;
 import br.ufrj.spemarti.webservice.entity.Question;
 import br.ufrj.spemarti.webservice.entity.Table;
 import br.ufrj.spemarti.webservice.entity.User;
+import br.ufrj.spemarti.webservice.entity.Version;
 import br.ufrj.spemarti.webservice.entity.VersionHistory;
 
 @Stateless
@@ -89,27 +90,40 @@ public class FragmentHandler implements IFragmentHandler{
 			throw new RuntimeException("Não foi possível recuperar o histórico do fragmento " + fragment.getPresentationName());
 		}
 		
-		//o fragmento que vem para ser modificado deve conter o numero de revisão de sua versão anterior para comparação.
-		if(vh.getRootVersion().getRevision()!= fragment.getRevision()){
-			throw new RuntimeException("Fragmento não sincronizado com o svn.");
+		//significa que para o cliente, a entidade já está versionada corretamene
+		if(fragment.getId()!=null){
+			if(!vh.getRootVersion().getId().equals(fragment.getId())){
+				throw new RuntimeException("Erro ao modificar o fragmento "+ fragment.getPresentationName());
+			}
+			return fragment;
+			
+		}else{
+		
+			//o fragmento que vem para ser modificado deve conter o numero de revisão de sua versão anterior para comparação.
+			if(vh.getRootVersion().getRevision()!= fragment.getRevision()){
+				throw new RuntimeException("Fragmento não sincronizado com o svn.");
+			}
+			
+			fragment.setCreationDate(new Date());
+			fragment.setUser(user);
+			fragment.setRevision(vh.generateNewRevisionNumber());
+			Version lastRoot = vh.getRootVersion();
+			lastRoot.setNextVersion(fragment);
+			fragment.setPreviousVersion(lastRoot);
+			vh.getVersions().add(fragment);
+			vh.setRootVersion(fragment);
+			fragment.setVersionHistory(vh);
+			
+			try{
+				em.persist(fragment);
+				em.merge(lastRoot);
+				em.merge(vh);
+				em.flush();
+			}catch (Exception e) {
+				throw new RuntimeException("Erro ao modificar o fragmento" + fragment.getPresentationName(), e);
+			}	
+			return fragment;
 		}
-		
-		fragment.setCreationDate(new Date());
-		fragment.setUser(user);
-		fragment.setRevision(vh.generateNewRevisionNumber());
-		vh.getVersions().add(fragment);
-		vh.setRootVersion(fragment);
-		fragment.setVersionHistory(vh);
-		
-		try{
-			em.persist(fragment);
-			em.merge(vh);
-			em.flush();
-		}catch (Exception e) {
-			throw new RuntimeException("Erro ao modificar o fragmento" + fragment.getPresentationName(), e);
-		}	
-		return fragment;
-		
 	}
 	
 	public FragmentDefinition commit(FragmentDefinition parent, FragmentDefinition fragment, Integer idUsuario) {

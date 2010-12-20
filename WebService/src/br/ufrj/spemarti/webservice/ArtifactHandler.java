@@ -14,6 +14,7 @@ import br.ufrj.spemarti.webservice.entity.ArtifactDefinition;
 import br.ufrj.spemarti.webservice.entity.ArtifactFragment_Relationship;
 import br.ufrj.spemarti.webservice.entity.FragmentDefinition;
 import br.ufrj.spemarti.webservice.entity.User;
+import br.ufrj.spemarti.webservice.entity.Version;
 import br.ufrj.spemarti.webservice.entity.VersionHistory;
 
 @Stateless
@@ -89,12 +90,16 @@ public class ArtifactHandler implements IArtifactHandler{
 		artifact.setUser(user);
 		artifact.setRevision(vh.generateNewRevisionNumber());
 		
+		Version lastRoot = vh.getRootVersion();
+		lastRoot.setNextVersion(artifact);
+		artifact.setPreviousVersion(lastRoot);
 		Integer lastRootId = vh.getRootVersion().getId();
 		vh.getVersions().add(artifact);
 		vh.setRootVersion(artifact);
 		artifact.setVersionHistory(vh);
 		try{
 			em.persist(artifact);
+			em.merge(lastRoot);
 			em.merge(vh);
 			em.flush();
 			
