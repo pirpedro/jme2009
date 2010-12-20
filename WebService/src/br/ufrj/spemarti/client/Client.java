@@ -4,27 +4,33 @@ import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.rmi.PortableRemoteObject;
 
-import br.ufrj.spemarti.webservice.Svn;
+import br.ufrj.spemarti.webservice.entity.ArtifactDefinition;
+import br.ufrj.spemarti.webservice.entity.ArtifactFragment_Relationship;
+import br.ufrj.spemarti.webservice.entity.ArtifactKinds;
 import br.ufrj.spemarti.webservice.entity.Diagram;
 import br.ufrj.spemarti.webservice.entity.FragmentDefinition;
 import br.ufrj.spemarti.webservice.entity.Image;
-import br.ufrj.spemarti.webservice.entity.Question;
 
 
 public class Client {
     public static void main(String[] args) throws Exception {
     	
-    	Context jndiContext = getInitialContext();
+    /*	Context jndiContext = getInitialContext();
     	Object ref = jndiContext.lookup("SvnBean/remote");
-    	Svn dao = (Svn)PortableRemoteObject.narrow(ref, Svn.class);
+    	Svn dao = (Svn)PortableRemoteObject.narrow(ref, Svn.class);*/
     	
-        FragmentDefinition fragment = new Question();
-        fragment.setPresentationName("testeFragmento");
        
-    	dao.createUser("pedro", "pedro");
-    	dao.checkIn(fragment, 1);
+       Workspace workspace = new Workspace();
+       workspace.createUser("pedro", "pedro");
+       
+       ArtifactDefinition artifact = new ArtifactDefinition();
+       artifact.setaKind(ArtifactKinds.DIAGRAM);
+       artifact.setPresentationName("artefatoTeste");
+       geraRelacionamento(artifact, geraNovoDiagrama("DiagramaTeste"));
+       workspace.checkIn(artifact, "/", "projeto", "artefatoImagem");
+       
+    	
     /*	System.out.println("Starting Test Client");
         URL url = new URL("http://localhost:8080/svn/SvnBean?wsdl");
         QName qname = new QName(
@@ -50,17 +56,27 @@ public class Client {
         proxy.checkIn(sie, "hahaha"); */
     }
     
-    public static Diagram geraNovoDiagrama(){
+    public static Diagram geraNovoDiagrama(String presentationName){
     	Diagram sieDiagram = new Diagram();
-    	sieDiagram.addLabel("Diagrama");
+    	sieDiagram.addLabel(presentationName);
+    	sieDiagram.setPresentationName(presentationName);
     	for(int i =0; i<3; i++){
     		Image sieImagem = new Image();
-    		sieImagem.addLabel("Imagem"+ i);
+    		sieImagem.addLabel(presentationName +"::imagem::"+ i);
+    		sieImagem.setPresentationName(presentationName +":imagem::"+ i);
     		sieDiagram.getListaImagem().add(sieImagem);
     	}
     	
     	return sieDiagram;
     }
+    
+    public static void geraRelacionamento(ArtifactDefinition artefato, FragmentDefinition fragment){
+    	ArtifactFragment_Relationship rel = new ArtifactFragment_Relationship();
+    	rel.setArtifact(artefato);
+    	rel.getContainers().add(fragment);
+    	artefato.getArtifactFragment().add(rel);
+    }
+    
     
     public static Context getInitialContext() throws NamingException{
     	Properties properties = new Properties();
