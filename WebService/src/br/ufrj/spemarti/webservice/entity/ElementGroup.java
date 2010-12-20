@@ -17,7 +17,7 @@ public class ElementGroup extends br.ufrj.spemarti.webservice.entity.List{
 
 	private static final long serialVersionUID = -4172052773184219107L;
 
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
 	private List<SimpleInformationElement> internalContents = new ArrayList<SimpleInformationElement>();
 
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="parent")
@@ -25,6 +25,23 @@ public class ElementGroup extends br.ufrj.spemarti.webservice.entity.List{
 	
 	@ManyToOne
 	private ElementGroup parent;
+	
+	@Override
+	public List<FragmentDefinition> getChildren() {
+		List<FragmentDefinition> listaFragmento = new ArrayList<FragmentDefinition>();
+		for(SimpleInformationElement sie :getInternalContents()){
+			listaFragmento.add(sie);
+		}
+		
+		for(SimpleInformationElement sie :getContents()){
+			listaFragmento.add(sie);
+		}
+		for(ElementGroup sie :getChilds()){
+			listaFragmento.add(sie);
+		}
+		
+		return listaFragmento;
+	}
 	
 	public void setInternalContents(List<SimpleInformationElement> internalContents) {
 		this.internalContents = internalContents;

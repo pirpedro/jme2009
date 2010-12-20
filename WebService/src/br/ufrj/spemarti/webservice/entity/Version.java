@@ -63,8 +63,15 @@ public abstract class Version implements Serializable{
 	@ManyToOne
 	private User user;
 	
+	public Version(){
+		
+	}
 	
-	
+	public Version(Integer id, Integer revision, String label){
+		this.id = id;
+		this.revision = revision;
+		this.labelVersion = label;
+	}
 	
 	public void addLabel(String label){
 		this.labelVersion = label;

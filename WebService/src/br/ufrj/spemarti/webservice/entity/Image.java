@@ -20,6 +20,16 @@ public class Image extends SimpleInformationElement{
 	@Column
 	private String path;
 	
+	public Image(){
+		
+	}
+	
+	public Image(String path, String presentationName, Integer id, Integer revision, String label){
+		super(presentationName, id, revision, label);
+		this.path = path;
+	}
+	
+	
 	public boolean createPath(String path){
 		this.path = path;
 		return true;

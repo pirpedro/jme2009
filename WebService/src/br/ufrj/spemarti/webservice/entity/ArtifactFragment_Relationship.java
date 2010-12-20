@@ -10,8 +10,12 @@ import javax.persistence.NamedQuery;
 @DiscriminatorValue(value="0")
 @NamedQueries({
 	@NamedQuery(name="ArtifactFragment.recuperarPorArtifact",
-				query="SELECT af FROM ArtifactFragment_Relationship af " +
-						"WHERE af.artifact.id=:idArtifact")
+				query="SELECT distinct af FROM ArtifactFragment_Relationship af " +
+						"WHERE af.artifact.id=:idArtifact"),
+    @NamedQuery(name="ArtifactFragmentRelationship.recuperarRelacionamento",
+    			query="SELECT distinct af FROM ArtifactFragment_Relationship af JOIN af.containers cn " +
+    					"WHERE af.artifact.id= :idArtefato " +
+    					"AND cn.presentationName= :fragmentName")
 })
 public class ArtifactFragment_Relationship extends FragmentRelationship{
 

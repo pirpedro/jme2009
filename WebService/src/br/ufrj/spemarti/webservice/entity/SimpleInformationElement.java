@@ -8,6 +8,15 @@ public abstract class SimpleInformationElement extends FragmentDefinition{
 
 	private static final long serialVersionUID = 6144455305745720930L;
 	
+	public SimpleInformationElement(){
+		
+	}
+	
+	public SimpleInformationElement(String presentationName, Integer id, Integer revision, String label){
+		super(presentationName, id, revision, label);
+	}
+	
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

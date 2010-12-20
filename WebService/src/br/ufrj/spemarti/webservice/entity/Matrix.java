@@ -3,14 +3,13 @@ package br.ufrj.spemarti.webservice.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import br.ufrj.spemarti.webservice.ListType;
 
 
 @Entity
@@ -24,6 +23,22 @@ public class Matrix extends ComplexInformationElement{
 
 	@ManyToOne
 	private br.ufrj.spemarti.webservice.entity.List header;
+	
+	@Override
+	public List<FragmentDefinition> getChildren() {
+		List<FragmentDefinition> listaFragmento = new ArrayList<FragmentDefinition>();
+		if(header!=null){
+			header.setType(ListType.HEADER);
+			listaFragmento.add(header);
+		}
+		
+		for(br.ufrj.spemarti.webservice.entity.List list: getLines()){
+			list.setType(ListType.LINE);
+			listaFragmento.add(list);
+		}
+		
+		return listaFragmento;
+	}
 	
 	public void setLines(List<br.ufrj.spemarti.webservice.entity.List> lines) {
 		this.lines = lines;

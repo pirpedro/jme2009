@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+
+import br.ufrj.spemarti.webservice.ListType;
 
 
 @Entity
@@ -31,15 +34,27 @@ public class List extends ComplexInformationElement{
 	@Column
 	private Boolean isEnumerated;
 	
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToMany(fetch=FetchType.LAZY, cascade={})
 	private java.util.List<SimpleInformationElement> contents = new ArrayList<SimpleInformationElement>();
 
 	@ManyToMany(fetch=FetchType.LAZY, cascade={})
 	@JoinTable(joinColumns={@JoinColumn(name="list_id")}, 
 			    inverseJoinColumns={@JoinColumn(name="matrix_id")})
 	private java.util.List<Matrix> matrix = new ArrayList<Matrix>();
-
-
+	
+	@Transient
+	private ListType type;
+	
+	@Override
+	public java.util.List<FragmentDefinition> getChildren() {
+		java.util.List<FragmentDefinition> listaFragmento = new ArrayList<FragmentDefinition>();
+		for(SimpleInformationElement sie : getContents()){
+			listaFragmento.add(sie);
+		}
+		
+		return listaFragmento;
+	}
+	
 	public Boolean isOrdered(){
 		if(isOrderedAsc==true || isOrderedDesc==true){
 			return true;
@@ -126,6 +141,14 @@ public class List extends ComplexInformationElement{
 	@Override
 	public int hashCode() {
 		return this.getId();
+	}
+
+	public void setType(ListType type) {
+		this.type = type;
+	}
+
+	public ListType getType() {
+		return type;
 	}
 
 }

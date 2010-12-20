@@ -18,6 +18,16 @@ public class Question extends ComplexInformationElement{
 	@OneToMany(fetch=FetchType.LAZY, cascade={CascadeType.REMOVE}, mappedBy="question")
 	private List<Text> texts = new ArrayList<Text>();
 	
+	@Override
+	public List<FragmentDefinition> getChildren() {
+		List<FragmentDefinition> listaFragmento = new ArrayList<FragmentDefinition>();
+		for(Text txt : getTexts()){
+			listaFragmento.add(txt);
+		}
+		
+		return listaFragmento;
+	}
+	
 	public List<Text> getAsks(){
 		List<Text> listText = new ArrayList<Text>();
 		for(Text text : getTexts()){

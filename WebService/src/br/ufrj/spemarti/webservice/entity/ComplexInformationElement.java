@@ -1,11 +1,15 @@
 package br.ufrj.spemarti.webservice.entity;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 
 @Entity
 public abstract class ComplexInformationElement extends SimpleInformationElement{
 
 	private static final long serialVersionUID = -3320138959291887425L;
+	
+	public abstract List<FragmentDefinition> getChildren();
 	
 	@Override
 	public boolean equals(Object obj) {

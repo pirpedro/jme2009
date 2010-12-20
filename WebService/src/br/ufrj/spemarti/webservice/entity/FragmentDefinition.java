@@ -11,6 +11,14 @@ public abstract class FragmentDefinition extends WorkProductDefinition{
 	@OneToOne(mappedBy="fragment")
 	private SvnFile file;
 
+	public FragmentDefinition(){
+		
+	}
+	
+	public FragmentDefinition(String presentationName, Integer id, Integer revision, String label){
+		super(presentationName, id, revision, label);
+	}
+	
 	public void setFile(SvnFile file) {
 		this.file = file;
 	}

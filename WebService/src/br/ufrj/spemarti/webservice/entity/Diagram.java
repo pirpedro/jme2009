@@ -26,6 +26,16 @@ public class Diagram extends ComplexInformationElement{
 	}
 	
 	@Override
+	public List<FragmentDefinition> getChildren() {
+		List<FragmentDefinition> listaFragmento = new ArrayList<FragmentDefinition>();
+		for(Image img : getListaImagem()){
+			listaFragmento.add(img);
+		}
+		
+		return listaFragmento;
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;

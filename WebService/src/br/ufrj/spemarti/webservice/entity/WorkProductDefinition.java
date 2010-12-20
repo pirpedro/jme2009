@@ -13,6 +13,16 @@ public abstract class WorkProductDefinition extends Version{
 	
 	@Column
 	private String description;
+	
+	public WorkProductDefinition(){
+		
+	}
+	
+	public WorkProductDefinition(String presentationName, Integer id, Integer revision, String label){
+		super(id, revision, label);
+		this.presentationName = presentationName;
+	}
+	
 
 	public void setPresentationName(String presentationName) {
 		this.presentationName = presentationName;

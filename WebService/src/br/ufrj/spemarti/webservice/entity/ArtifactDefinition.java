@@ -1,6 +1,8 @@
 package br.ufrj.spemarti.webservice.entity;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -25,7 +27,19 @@ public class ArtifactDefinition extends WorkProductDefinition{
 	@OneToMany(mappedBy="artifact")
 	private Set<ArtifactContainer_Relationship> artifactContainer = new HashSet<ArtifactContainer_Relationship>();
 	
-
+	@OneToMany(mappedBy="artifact")
+	private Set<ArtifactFragment_Relationship> artifactFragment = new HashSet<ArtifactFragment_Relationship>();
+	
+	public java.util.List<FragmentDefinition> getFragments(){
+		List<FragmentDefinition> listaFragmentos = new ArrayList<FragmentDefinition>();
+		for(ArtifactFragment_Relationship rel : getArtifactFragment()){
+			listaFragmentos.add(rel.getContainers().get(0));
+		}
+		
+		return listaFragmentos;
+	}
+	
+	
 	public void setIsExternal(Boolean isExternal) {
 		this.isExternal = isExternal;
 	}
@@ -48,6 +62,16 @@ public class ArtifactDefinition extends WorkProductDefinition{
 
 	public Set<ArtifactContainer_Relationship> getArtifactContainer() {
 		return artifactContainer;
+	}
+
+
+	public void setArtifactFragment(Set<ArtifactFragment_Relationship> artifactFragment) {
+		this.artifactFragment = artifactFragment;
+	}
+
+
+	public Set<ArtifactFragment_Relationship> getArtifactFragment() {
+		return artifactFragment;
 	}
 
 }
