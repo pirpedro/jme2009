@@ -29,6 +29,9 @@
         <fileset dir="${jboss.home}/lib/endorsed">
             <include name="**/*.jar"/>
         </fileset>
+  		<fileset dir="${dir.lib}">
+  				<include name="*.jar" />
+  		</fileset>
 	<pathelement location="${build.classes.dir}"/>
 	<!-- So that we can get jndi.properties for InitialContext and log4j.xml file -->
 	<pathelement location="${basedir}/client-config"/>
