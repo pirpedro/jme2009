@@ -136,8 +136,8 @@ public class SvnBean implements Svn{
 
 		@WebMethod(operationName="checkInFragmentFragment")
 		public Version checkIn(FragmentDefinition parent, FragmentDefinition fragment, Integer userId) {
-			// TODO Auto-generated method stub
-			return null;
+			
+			return fragmentHandler.commit(parent, fragment, userId);
 		}
 
 		@WebMethod(operationName="removeArtifact")

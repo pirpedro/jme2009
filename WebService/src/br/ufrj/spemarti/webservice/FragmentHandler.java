@@ -7,7 +7,13 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import br.ufrj.spemarti.webservice.entity.Diagram;
+import br.ufrj.spemarti.webservice.entity.ElementGroup;
 import br.ufrj.spemarti.webservice.entity.FragmentDefinition;
+import br.ufrj.spemarti.webservice.entity.List;
+import br.ufrj.spemarti.webservice.entity.Matrix;
+import br.ufrj.spemarti.webservice.entity.Question;
+import br.ufrj.spemarti.webservice.entity.Table;
 import br.ufrj.spemarti.webservice.entity.User;
 import br.ufrj.spemarti.webservice.entity.VersionHistory;
 
@@ -22,6 +28,21 @@ public class FragmentHandler implements IFragmentHandler{
 	
 	@EJB
 	IVersionHistoryHandler vhHandler;
+	
+	@EJB
+	IDiagramHandler diagramHandler;
+	
+	@EJB
+	IQuestionHandler questionHandler;
+	
+	@EJB
+	IListHandler listHandler;
+	
+	@EJB
+	IElementGroupHandler egHandler;
+	
+	@EJB
+	IMatrixHandler matrixHandler;
 	
 	public FragmentDefinition commit(FragmentDefinition fragment,  Integer idUsuario){
 		
@@ -54,7 +75,7 @@ public class FragmentHandler implements IFragmentHandler{
 			em.persist(vh);
 			em.flush();
 		}catch (Exception e) {
-			return null;
+			throw new RuntimeException("Não foi possível versionar o fragmento" + fragment.getPresentationName());
 		}	
 		
 		return fragment;
@@ -95,13 +116,22 @@ public class FragmentHandler implements IFragmentHandler{
 		
 		User user = userHandler.recuperarPorId(idUsuario);
 		if(user==null){
-			return null;
+			throw new RuntimeException("Usuário não encontrado");
 		}
 		
 		//se o fragmento pai ainda não estiver sendo versionado não é possível criar o fragmento filho.
-		if(vhHandler.verificaExistenciaVersionamentoAtivo(parent.getPresentationName()) ){
-			return null;
+		if(!vhHandler.verificaExistenciaVersionamentoAtivo(parent.getPresentationName()) ){
+			throw new RuntimeException("O fragmento" + parent.getPresentationName() + "ainda não foi versionado.");
 		}
+		
+		parent = em.find(FragmentDefinition.class, parent.getId());
+		
+		if(parent!=null && parent.getId()!=null){
+			//se o pai nao for um tipo complexo, não posso agregar um outro elemento dentro dele.
+			if(!Utils.isComplexInformationInstance(parent)){
+				throw new RuntimeException("Não é possível agregar o fragmento " +fragment.getPresentationName()+ " ao fragmento" + parent.getPresentationName());
+			}
+		}	
 		
 		//caso o fragmento já esteja sendo versionado
 		if(vhHandler.verificaExistenciaVersionamentoAtivo(fragment.getPresentationName()) ){
@@ -114,34 +144,36 @@ public class FragmentHandler implements IFragmentHandler{
 	
 	private FragmentDefinition createFragment(FragmentDefinition pai, FragmentDefinition fragment, User user){
 		
-		if(pai!=null && pai.getId()!=null){
-			//se o pai nao for um tipo complexo, não posso agregar um outro elemento dentro dele.
-			if(!Utils.isComplexInformationInstance(pai)){
-				return null;
-			}
-			
-			pai = em.find(FragmentDefinition.class, pai.getId());
-		}else{
-			return null;
+		//torno ele uma entidade persistente
+		fragment = createFragment(fragment, user);
+		
+		if(pai instanceof Diagram){
+			diagramHandler.associate((Diagram) pai, fragment);
+		
+		}else if(pai instanceof Question){
+			questionHandler.associate((Question) pai, fragment);
+		
+		}else if(pai instanceof List){
+			listHandler.associate((List) pai, fragment);
+		
+		}else if(pai instanceof ElementGroup){
+			egHandler.associate((ElementGroup) pai, fragment);
+		
+		}else if(pai instanceof Matrix){
+			matrixHandler.associate((Matrix) pai, fragment);
+		
+		}else if(pai instanceof Table){
+			matrixHandler.associate((Table) pai, fragment);
+		
 		}
 		
-		
-		
-		fragment.setCreationDate(new Date());
-		fragment.setUser(user);
-		fragment.setRevision(0);
-		VersionHistory vh = new VersionHistory();
-		vh.getVersions().add(fragment);
-		vh.setRootVersion(fragment);
-		em.persist(fragment);
-		em.persist(vh);
-		em.flush();
-		
-		
-		return null;
+		return fragment;
 	}
 	
 	private FragmentDefinition modifyFragment(FragmentDefinition pai, FragmentDefinition fragment, User user){
+		//modificar o fragmento
+		fragment = modifyFragment(fragment, user);
+		
 		return null;
 	}
 
