@@ -69,11 +69,13 @@ public class Workspace {
 		Version artifactVersioned = getDao().checkIn(generateArtifact(artifact), filePath, folder, fileName, USER_ID_TEST);
 		artifact.setId(artifactVersioned.getId());
 		artifact.setRevision(artifactVersioned.getRevision());
+		artifact.setCreationDate(artifactVersioned.getCreationDate());
 		
 		for(FragmentDefinition fragment: artifact.getFragments()){
 			Version fragmentVersioned = getDao().checkIn(fragment, artifact, USER_ID_TEST);
 			fragment.setId(fragmentVersioned.getId());
 			fragment.setRevision(fragmentVersioned.getId());
+			fragment.setCreationDate(fragmentVersioned.getCreationDate());
 			commitFragment(fragment);
 			
 			
@@ -88,7 +90,8 @@ public class Workspace {
 				Version fragmentVersioned = getDao().checkIn(generateFragment(fragment), frag, USER_ID_TEST);
 				frag.setId(fragmentVersioned.getId());
 				frag.setRevision(fragmentVersioned.getId());
-				commitFragment(fragment);
+				frag.setCreationDate(fragmentVersioned.getCreationDate());
+				commitFragment(frag);
 			}
 		}
 		
