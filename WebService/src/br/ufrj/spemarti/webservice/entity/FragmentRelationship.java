@@ -30,7 +30,7 @@ public abstract class FragmentRelationship implements Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
-	@ManyToMany
+	@ManyToMany(cascade={})
 	@JoinTable(joinColumns={@JoinColumn(name="fragmentRelationship_id")},
 				inverseJoinColumns={@JoinColumn(name="fragment_id")})
 	private List<FragmentDefinition> containers = new ArrayList<FragmentDefinition>();

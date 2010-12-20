@@ -21,7 +21,7 @@ public class ArtifactFragment_Relationship extends FragmentRelationship{
 
 	private static final long serialVersionUID = -1834840404864842853L;
 	
-	@ManyToOne
+	@ManyToOne(cascade={})
 	private ArtifactDefinition artifact;
 
 	public void setArtifact(ArtifactDefinition artifact) {

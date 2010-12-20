@@ -25,10 +25,10 @@ import org.hibernate.annotations.ForceDiscriminator;
 @ForceDiscriminator
 @NamedQueries({
 	@NamedQuery(name="Version.recuperarRootPorPath",
-				query="SELECT vh.rootVersion FROM VersionHistory vh WHERE vh.filePath=:path " +
+				query="SELECT distinct vh.rootVersion FROM VersionHistory vh WHERE vh.filePath=:path " +
 						"AND vh.isDeleted = false"),
 	@NamedQuery(name="Version.recuperarRootPorPathFolderFileName",
-				query="SELECT vh.rootVersion FROM VersionHistory vh WHERE vh.filePath=:path " +
+				query="SELECT distinct vh.rootVersion FROM VersionHistory vh WHERE vh.filePath=:path " +
 				"AND vh.folder=:folder AND vh.fileName=:fileName AND vh.isDeleted = false")
 })
 public abstract class Version implements Serializable{

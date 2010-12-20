@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
@@ -18,7 +20,10 @@ public class Matrix extends ComplexInformationElement{
 
 	private static final long serialVersionUID = -5156679932082919173L;
 	
-	@ManyToMany(fetch=FetchType.LAZY, cascade={}, mappedBy="matrix")
+	@ManyToMany(fetch=FetchType.LAZY, cascade={})
+	@JoinTable(name="MATRIX_LIST",
+			joinColumns={@JoinColumn(name="matrix_id")}, 
+			    inverseJoinColumns={@JoinColumn(name="list_id")})
 	private List<br.ufrj.spemarti.webservice.entity.List> lines = new ArrayList<br.ufrj.spemarti.webservice.entity.List>();
 
 	@ManyToOne

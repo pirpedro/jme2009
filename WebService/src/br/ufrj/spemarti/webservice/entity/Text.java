@@ -22,6 +22,15 @@ public class Text extends SimpleInformationElement{
 	@Column
 	@Enumerated(value=EnumType.STRING)
 	private TextType textType;
+	
+	public Text(){
+		
+	}
+	
+	public Text(String value, String presentationName, Integer id, Integer revision, String label){
+		super(presentationName, id, revision, label);
+		this.value= value;
+	}
 
 	public void setValue(String value) {
 		this.value = value;

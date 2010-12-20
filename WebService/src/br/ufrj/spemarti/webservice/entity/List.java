@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
@@ -39,11 +38,6 @@ public class List extends ComplexInformationElement{
 				inverseJoinColumns={@JoinColumn(name="FRAGMENT_ID")})
 	private java.util.List<SimpleInformationElement> contents = new ArrayList<SimpleInformationElement>();
 
-	@ManyToMany(fetch=FetchType.LAZY, cascade={})
-	@JoinTable(joinColumns={@JoinColumn(name="list_id")}, 
-			    inverseJoinColumns={@JoinColumn(name="matrix_id")})
-	private java.util.List<Matrix> matrix = new ArrayList<Matrix>();
-	
 	@Transient
 	private ListType type;
 	
@@ -120,14 +114,6 @@ public class List extends ComplexInformationElement{
 		return contents;
 	}
 
-	public void setMatrix(java.util.List<Matrix> matrix) {
-		this.matrix = matrix;
-	}
-
-	public java.util.List<Matrix> getMatrix() {
-		return matrix;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
