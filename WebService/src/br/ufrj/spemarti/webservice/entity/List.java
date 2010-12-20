@@ -2,7 +2,6 @@ package br.ufrj.spemarti.webservice.entity;
 
 import java.util.ArrayList;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -35,6 +34,9 @@ public class List extends ComplexInformationElement{
 	private Boolean isEnumerated;
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade={})
+	@JoinTable(name="LIST_FRAGMENT",
+				joinColumns={@JoinColumn(name="LIST_ID")},
+				inverseJoinColumns={@JoinColumn(name="FRAGMENT_ID")})
 	private java.util.List<SimpleInformationElement> contents = new ArrayList<SimpleInformationElement>();
 
 	@ManyToMany(fetch=FetchType.LAZY, cascade={})
@@ -44,6 +46,13 @@ public class List extends ComplexInformationElement{
 	
 	@Transient
 	private ListType type;
+	
+	public List(){
+		this.isLabeled = false;
+		this.isOrderedAsc = false;
+		this.isOrderedDesc = false;
+		this.isEnumerated = false;
+	}
 	
 	@Override
 	public java.util.List<FragmentDefinition> getChildren() {

@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -18,6 +20,9 @@ public class ElementGroup extends br.ufrj.spemarti.webservice.entity.List{
 	private static final long serialVersionUID = -4172052773184219107L;
 
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
+	@JoinTable(name="ELEMENTGROUP_FRAGMENT",
+				joinColumns={@JoinColumn(name="ELEMENT_GROUP_ID")},
+				inverseJoinColumns={@JoinColumn(name="FRAGMENT_ID")})
 	private List<SimpleInformationElement> internalContents = new ArrayList<SimpleInformationElement>();
 
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="parent")
