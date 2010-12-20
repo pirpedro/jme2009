@@ -30,19 +30,27 @@ public class Client {
     	
        
        Workspace workspace = new Workspace();
-       workspace.createUser("pedro", "pedro");
+    //   workspace.createUser("pedro", "pedro");
        
-       ArtifactDefinition artifact = new ArtifactDefinition();
-       artifact.setaKind(ArtifactKinds.DIAGRAM);
-       artifact.setPresentationName("artefatoTeste");
-       java.util.List<SimpleInformationElement> listaElemento = new ArrayList<SimpleInformationElement>();
-       listaElemento.add(geraQuestion("questão"));
-       listaElemento.add(geraNovoDiagrama("diagrama"));
+    //  ArtifactDefinition artifact = new ArtifactDefinition();
+     // artifact.setaKind(ArtifactKinds.DIAGRAM);
+     //  artifact.setPresentationName("artefatoTeste");
+     //  java.util.List<SimpleInformationElement> listaElemento = new ArrayList<SimpleInformationElement>();
+      // listaElemento.add(geraQuestion("questão"));
+      // listaElemento.add(geraNovoDiagrama("diagrama"));
+    //  listaElemento.add(geraNovoDiagrama("diagrama"));
+    //  java.util.List<SimpleInformationElement> listaLinhas = new ArrayList<SimpleInformationElement>();
       
-       geraRelacionamento(artifact, geraNovaLista("lista", listaElemento));
-      // geraRelacionamento(artifact, geraNovoDiagrama("diagrama"));
+    //  listaLinhas.add(geraQuestion("questão"));
+    //  java.util.List<List> listas = new ArrayList<List>();
+   //   listas.add(geraNovaLista("listaLinha", listaLinhas));
+   //   
+      // geraRelacionamento(artifact, geraNovaLista("lista", listaElemento));
+       
+   //    geraRelacionamento(artifact, geraNovaMatriz("matriz", geraNovaLista("listaCabecalho", listaElemento), listas));
+  //   geraRelacionamento(artifact, geraNovoDiagrama("diagrama"));
        //geraRelacionamento(artifact, geraQuestion("questão"));
-       workspace.checkIn(artifact, "/", "projeto", "artefatoImagem");
+    //   workspace.checkIn(artifact, "/", "projeto", "artefatoImagem");
        
     	
     /*	System.out.println("Starting Test Client");
@@ -123,7 +131,6 @@ public class Client {
     	matrix.setLabelVersion(presentationName);
     	matrix.setHeader(cabecalho);
     	for(List lista: linhas){
-    		lista.getMatrix().add(matrix);
     		matrix.getLines().add(lista);
     	}
     	

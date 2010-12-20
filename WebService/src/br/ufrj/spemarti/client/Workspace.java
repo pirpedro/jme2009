@@ -45,7 +45,16 @@ public class Workspace {
 			e.printStackTrace();
 		}
 		
-	    	
+		ArtifactDefinition oldArtifact = new ArtifactDefinition();
+	    oldArtifact.setId(1);
+	    oldArtifact.setPresentationName("artefatoTeste");
+	    oldArtifact.setRevision(0);
+	    
+	    
+	    ArtifactDefinition newArtifact = new ArtifactDefinition();
+	    newArtifact.setPresentationName("artefatoTeste");
+	    newArtifact.setPreviousVersion(oldArtifact);
+	    getDao().checkIn(newArtifact, "/", "projeto", "artefatoImagem", USER_ID_TEST);
 	}
 	
 	public void createUser(String login, String senha){
