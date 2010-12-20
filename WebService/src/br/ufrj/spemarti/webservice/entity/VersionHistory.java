@@ -59,6 +59,10 @@ public class VersionHistory implements Serializable{
 	@Column
 	private Boolean isDeleted;
 	
+	public VersionHistory(){
+		this.isDeleted=false;
+	}
+	
 	public void delete(Integer versionId){
 		List<Version> newVersions = new ArrayList<Version>();
 		
