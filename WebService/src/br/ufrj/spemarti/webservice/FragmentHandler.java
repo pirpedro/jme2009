@@ -145,11 +145,20 @@ public class FragmentHandler implements IFragmentHandler{
 		return null;
 	}
 
-	public boolean remove(String presentationName, Integer idUsuario) {
+	public boolean remove(FragmentDefinition fragment, Integer idUsuario) {
 		//para deletar um fragmento é apenas necessário deletar seu histórico.
-		VersionHistory vh = vhHandler.recuperaVersionHistoryAtivo(presentationName);
+		VersionHistory vh = vhHandler.recuperaVersionHistoryAtivo(fragment.getPresentationName());
 		if(vh==null){
-			throw new RuntimeException("Não existe fragmento versinado com o nome "+ presentationName);
+			throw new RuntimeException("Não existe fragmento versionado com o nome "+ fragment.getPresentationName());
+		}
+		
+		if(!Utils.isFragmentInstance(vh.getRootVersion())){
+			throw new RuntimeException(fragment.getPresentationName() +" não é um fragmento válido");
+		}
+		
+		//se o numero de revisão do artefato a ser excluido nao for igual a raiz do histórico significa que o usuário tentou excluir uma versão não sincronizada.
+		if(!vh.getRootVersion().getRevision().equals(fragment.getRevision())){
+			throw new RuntimeException("Fragmento "+fragment.getPresentationName()+ " não sincronizado. Não foi possível excluí-lo");
 		}
 		
 		vh.setIsDeleted(true);

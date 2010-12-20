@@ -34,7 +34,7 @@ public interface IFragmentHandler {
 	 * @param idUsuario
 	 * @return
 	 */
-	boolean remove(String presentationName, Integer idUsuario);
+	boolean remove(FragmentDefinition fragment, Integer idUsuario);
 	
 	/**
 	 * Remove um fragmento contido em outro fragmento.

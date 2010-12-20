@@ -29,7 +29,7 @@ public interface IArtifactHandler {
 	 * @param idUsuario
 	 * @return
 	 */
-	ArtifactDefinition commit(ArtifactDefinition parent, FragmentDefinition fragment, Integer idUsuario);
+	FragmentDefinition commit(ArtifactDefinition parent, FragmentDefinition fragment, Integer idUsuario);
 	
 	/**
 	 * Remove um artefato.
@@ -38,7 +38,7 @@ public interface IArtifactHandler {
 	 * @param idUsuario
 	 * @return
 	 */
-	boolean remove(String presentationName, Integer idUsuario);
+	boolean remove(ArtifactDefinition artifact, Integer idUsuario);
 	
 	/**
 	 * Remove um fragmento contido em um artefato.

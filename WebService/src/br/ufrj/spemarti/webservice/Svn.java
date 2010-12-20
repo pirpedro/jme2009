@@ -20,13 +20,15 @@ public interface Svn extends Remote {
 		 * @return retorna o numero de revisão gerado para a nova versão do fragmento.
 		 */
 	    Version checkIn(FragmentDefinition fragment, Integer userId);
-        
-	    Version checkIn(ArtifactDefinition artifact, String filePath, String folder, String fileName, Integer userId);
+        Version checkIn(ArtifactDefinition artifact, String filePath, String folder, String fileName, Integer userId);
 	    Version checkIn(FragmentDefinition fragment, ArtifactDefinition parent, Integer userId);
-        
-	    Version checkIn(FragmentDefinition parent, FragmentDefinition fragment, Integer userId);
+        Version checkIn(FragmentDefinition parent, FragmentDefinition fragment, Integer userId);
 	    
-	    boolean remove(String presentationName, Integer userId);
+	    boolean remove(ArtifactDefinition artifact, Integer userId);
+	    boolean remove(FragmentDefinition fragment, Integer userId);
+	    boolean remove(ArtifactDefinition parent, FragmentDefinition fragment, Integer userId);
+	    boolean remove(FragmentDefinition parent, FragmentDefinition fragment, Integer userId);
+	    
                
         void createUser(String login, String password);
         void removeUser(String login, String password);

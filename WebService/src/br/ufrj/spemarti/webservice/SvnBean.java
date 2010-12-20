@@ -15,7 +15,6 @@ import javax.persistence.Query;
 import br.ufrj.spemarti.webservice.entity.ArtifactDefinition;
 import br.ufrj.spemarti.webservice.entity.FragmentDefinition;
 import br.ufrj.spemarti.webservice.entity.Version;
-import br.ufrj.spemarti.webservice.entity.VersionHistory;
 
 @Stateless
 @WebService
@@ -131,8 +130,8 @@ public class SvnBean implements Svn{
 
 		@WebMethod(operationName="checkInFragmentArtifact")
 		public Version checkIn(FragmentDefinition fragment,	ArtifactDefinition parent, Integer userId) {
-			// TODO Auto-generated method stub
-			return null;
+			
+			return artifactHandler.commit(parent, fragment, userId);
 		}
 
 		@WebMethod(operationName="checkInFragmentFragment")
@@ -141,17 +140,26 @@ public class SvnBean implements Svn{
 			return null;
 		}
 
-		@WebMethod(operationName="removeWorkProduct")
-		public boolean remove(String presentationName, Integer userId) {
-			VersionHistory vh = vhHandler.recuperaVersionHistoryAtivo(presentationName);
-			
-			//se o elemento for um artefato
-			if(Utils.isArtifactInstance(vh.getRootVersion())){
-				return artifactHandler.remove(presentationName, userId);
-			}else{
-				return fragmentHandler.remove(presentationName, userId);
-			}
-			
+		@WebMethod(operationName="removeArtifact")
+		public boolean remove(ArtifactDefinition artifact, Integer userId) {
+			return artifactHandler.remove(artifact, userId);
+		}
+
+		@WebMethod(operationName="removeFragment")
+		public boolean remove(FragmentDefinition fragment, Integer userId) {
+			return fragmentHandler.remove(fragment, userId);
+		}
+
+		@WebMethod(operationName="removeFragmentFromArtifact")
+		public boolean remove(ArtifactDefinition parent, FragmentDefinition fragment, Integer userId) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@WebMethod(operationName="removeFragmentFromFragment")
+		public boolean remove(FragmentDefinition parent, FragmentDefinition fragment, Integer userId) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 
 		

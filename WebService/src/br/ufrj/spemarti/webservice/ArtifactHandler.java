@@ -6,13 +6,13 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import br.ufrj.spemarti.webservice.entity.ArtifactDefinition;
 import br.ufrj.spemarti.webservice.entity.ArtifactFragment_Relationship;
 import br.ufrj.spemarti.webservice.entity.FragmentDefinition;
-import br.ufrj.spemarti.webservice.entity.FragmentRelationship;
 import br.ufrj.spemarti.webservice.entity.User;
 import br.ufrj.spemarti.webservice.entity.VersionHistory;
 
@@ -27,6 +27,9 @@ public class ArtifactHandler implements IArtifactHandler{
 	
 	@EJB
 	IVersionHistoryHandler vhHandler;
+	
+	@EJB
+	IFragmentHandler fragmentHandler;
 	
 	public ArtifactDefinition commit(ArtifactDefinition artifact,
 			String filePath, String folder, String fileName,Integer idUsuario) {
@@ -111,18 +114,89 @@ public class ArtifactHandler implements IArtifactHandler{
 		return artifact;
 	}
 
-	public ArtifactDefinition commit(ArtifactDefinition parent,
-			FragmentDefinition fragment, Integer idUsuario) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public FragmentDefinition commit(ArtifactDefinition parent,	FragmentDefinition fragment, Integer idUsuario) {
+		User user = userHandler.recuperarPorId(idUsuario);
+		if(user ==null){
+			throw new RuntimeException("Usuario não existente");
+		}
+		parent = validaArtefato(parent, user);
+		
+		if(parent==null){
+			throw new RuntimeException("Não foi possível completar a operação");
+		}
+		
+		fragment = fragmentHandler.commit(fragment, idUsuario);
+		ArtifactFragment_Relationship rel = recuperaRelacionamento(parent.getId(), fragment.getPresentationName());
+		
+		try{
+			if(rel!=null){
+				//relacionamento direto só possui um fragmento, posso excluir direto.
+				em.remove(rel);
+			}
+			ArtifactFragment_Relationship newRel = new ArtifactFragment_Relationship();
+			newRel.setArtifact(parent);
+			newRel.getContainers().add(fragment);
+			em.merge(newRel);
+		}catch (Exception e) {
+			throw new RuntimeException("Não foi possível realizar a operação");
+		}
+		
+		return fragment;
 	}
-
-	public boolean remove(String presentationName, Integer idUsuario) {
+	
+	/**
+	 * Alterar o método para contemplar a busca por relacionamento de container.
+	 * @param idArtefato
+	 * @param idFragment
+	 * @return
+	 */
+	private ArtifactFragment_Relationship recuperaRelacionamento(Integer idArtefato, String  fragmentName){
+		Query query = em.createNamedQuery("ArtifactFragmentRelationship.recuperarRelacionamento");
+		query.setParameter("idArtefato",idArtefato);
+		query.setParameter("fragmentName", fragmentName);
+		try{
+			//considero que por enquanto um fragmento só pode participar de um relacionamento direto com um artefato.
+			return (ArtifactFragment_Relationship) query.getSingleResult();
+		}catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	private ArtifactDefinition validaArtefato(ArtifactDefinition artefato, User user){
+		artefato = em.find(ArtifactDefinition.class,artefato.getId());
+		VersionHistory vh = artefato.getVersionHistory();
+		if(vh.getIsDeleted()){
+			throw new RuntimeException("o artefato" + artefato.getPresentationName() + "não ´emais versionado");
+		}
+		
+		if(!vh.getRootVersion().getId().equals(artefato.getId())){
+			throw new RuntimeException("Artefato " + artefato.getPresentationName() + " não sincronizado com o svn");
+		}
+		
+		if(!artefato.getUser().getId().equals(user.getId())){
+			throw new RuntimeException("Artefato " + artefato.getPresentationName() + " não sincronizado com o svn");
+		}
+		
+		return artefato;
+		
+	}
+	
+	public boolean remove(ArtifactDefinition artifact, Integer idUsuario) {
 		
 		//para deletar um artefato é apenas necessário deletar seu histórico.
-		VersionHistory vh = vhHandler.recuperaVersionHistoryAtivo(presentationName);
+		VersionHistory vh = vhHandler.recuperaVersionHistoryAtivo(artifact.getPresentationName());
 		if(vh==null){
-			throw new RuntimeException("Não existe artefato versinado com o nome "+ presentationName);
+			throw new RuntimeException("Não existe artefato versionado com o nome "+ artifact.getPresentationName());
+		}
+		
+		if(!Utils.isArtifactInstance(vh.getRootVersion())){
+			throw new RuntimeException(artifact.getPresentationName() +" não é um artefato");
+		}
+		
+		//se o numero de revisão do artefato a ser excluido nao for igual a raiz do histórico significa que o usuário tentou excluir uma versão não sincronizada.
+		if(!vh.getRootVersion().getRevision().equals(artifact.getRevision())){
+			throw new RuntimeException("Artefato "+artifact.getPresentationName()+ " não sincronizado. Não foi possível excluí-lo");
 		}
 		
 		vh.setIsDeleted(true);
@@ -137,9 +211,30 @@ public class ArtifactHandler implements IArtifactHandler{
 
 	public boolean remove(ArtifactDefinition parent, String presentationName,
 			Integer idUsuario) {
-		// TODO Auto-generated method stub
-		return false;
+		User user = userHandler.recuperarPorId(idUsuario);
+		if(user == null){
+			throw new RuntimeException("usuario nao encontrado");
+		}
+		parent = validaArtefato(parent, user);
+		if(parent==null){
+			throw new RuntimeException("Não foi possível completar a operação");
+		}
+		ArtifactFragment_Relationship rel = recuperaRelacionamento(parent.getId(), presentationName);
+		
+		if(rel==null){
+			throw new RuntimeException("O fragmento " + presentationName + "não existe no artefato " + parent.getPresentationName());
+		}
+		
+		try{
+			em.remove(rel);
+		}catch (Exception e) {
+			return false;
+		}
+		
+		
+		return true;
 	}
+	
 
 	public List<ArtifactFragment_Relationship> recuperarRelacionamentosArtefato(
 			Integer idArtefato) {
