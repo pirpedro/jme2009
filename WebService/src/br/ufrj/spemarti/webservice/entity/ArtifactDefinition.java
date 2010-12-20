@@ -30,6 +30,10 @@ public class ArtifactDefinition extends WorkProductDefinition{
 	@OneToMany(mappedBy="artifact")
 	private Set<ArtifactFragment_Relationship> artifactFragment = new HashSet<ArtifactFragment_Relationship>();
 	
+	public ArtifactDefinition(){
+		this.isExternal = false;
+	}
+	
 	public java.util.List<FragmentDefinition> getFragments(){
 		List<FragmentDefinition> listaFragmentos = new ArrayList<FragmentDefinition>();
 		for(ArtifactFragment_Relationship rel : getArtifactFragment()){
