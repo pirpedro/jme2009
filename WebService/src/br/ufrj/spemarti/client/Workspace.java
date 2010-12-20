@@ -72,7 +72,7 @@ public class Workspace {
 		artifact.setCreationDate(artifactVersioned.getCreationDate());
 		
 		for(FragmentDefinition fragment: artifact.getFragments()){
-			Version fragmentVersioned = getDao().checkIn(fragment, artifact, USER_ID_TEST);
+			Version fragmentVersioned = getDao().checkIn(generateFragment(fragment), generateArtifact(artifact), USER_ID_TEST);
 			fragment.setId(fragmentVersioned.getId());
 			fragment.setRevision(fragmentVersioned.getId());
 			fragment.setCreationDate(fragmentVersioned.getCreationDate());
@@ -87,7 +87,7 @@ public class Workspace {
 		if(Utils.isComplexInformationInstance(fragment)){
 			ComplexInformationElement cie = (ComplexInformationElement) fragment;
 			for(FragmentDefinition frag : cie.getChildren()){
-				Version fragmentVersioned = getDao().checkIn(generateFragment(fragment), frag, USER_ID_TEST);
+				Version fragmentVersioned = getDao().checkIn(generateFragment(fragment), generateFragment(frag), USER_ID_TEST);
 				frag.setId(fragmentVersioned.getId());
 				frag.setRevision(fragmentVersioned.getId());
 				frag.setCreationDate(fragmentVersioned.getCreationDate());
@@ -113,32 +113,46 @@ public class Workspace {
 	
 	private FragmentDefinition generateFragment(FragmentDefinition fragment){
 		FragmentDefinition newFragment= null ;
-		if(fragment instanceof Diagram){
-			newFragment = new Diagram();
 		
+		if(Utils.isComplexInformationInstance(fragment)){
+			
+			
+			if(fragment instanceof Diagram){
+				newFragment = new Diagram();
+			
+			}else if(fragment instanceof Question){
+				newFragment = new Question();
+			
+			}else if(fragment instanceof Table){
+				newFragment = new Table();
+				
+			}else if(fragment instanceof Matrix){
+				newFragment = new Matrix();
+			
+			}else if(fragment instanceof ElementGroup){
+				newFragment = new ElementGroup();
+			
+			}else if(fragment instanceof br.ufrj.spemarti.webservice.entity.List){
+				newFragment = new br.ufrj.spemarti.webservice.entity.List();
+				((br.ufrj.spemarti.webservice.entity.List) newFragment).setType(((br.ufrj.spemarti.webservice.entity.List) fragment).getType());
+			}
+			
+			
 		}else if(fragment instanceof Image){
 			newFragment = new Image();
-		
-		}else if(fragment instanceof Question){
-			newFragment = new Question();
+			((Image)newFragment).setPath(((Image) fragment).getPath());
+			
+		}else if(fragment instanceof LabeledText){
+			newFragment = new LabeledText();
+			((LabeledText)newFragment).setValue(((LabeledText) fragment).getValue());
+			((LabeledText)newFragment).setLabel(((LabeledText) fragment).getLabel());
+			((LabeledText)newFragment).setTextType(((LabeledText) fragment).getTextType());
 		
 		}else if(fragment instanceof Text){
 			newFragment = new Text();
-		
-		}else if(fragment instanceof LabeledText){
-			newFragment = new LabeledText();
-		
-		}else if(fragment instanceof Table){
-			newFragment = new Table();
-		
-		}else if(fragment instanceof Matrix){
-			newFragment = new Matrix();
-		
-		}else if(fragment instanceof ElementGroup){
-			newFragment = new ElementGroup();
-		
-		}else if(fragment instanceof br.ufrj.spemarti.webservice.entity.List){
-			newFragment = new br.ufrj.spemarti.webservice.entity.List();
+			((Text)newFragment).setValue(((Text) fragment).getValue());
+			((Text)newFragment).setTextType(((Text) fragment).getTextType());
+			
 		}
 		
 		newFragment.setAnnotation(fragment.getAnnotation());
@@ -149,6 +163,10 @@ public class Workspace {
 		newFragment.setRevision(fragment.getRevision());
 		newFragment.setUser(fragment.getUser());
 		return newFragment;
+		
+		
+				
+		
 	}
 	
 	public void copy(){

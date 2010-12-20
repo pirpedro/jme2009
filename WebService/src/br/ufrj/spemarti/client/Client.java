@@ -1,4 +1,5 @@
 package br.ufrj.spemarti.client;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.naming.Context;
@@ -11,6 +12,13 @@ import br.ufrj.spemarti.webservice.entity.ArtifactKinds;
 import br.ufrj.spemarti.webservice.entity.Diagram;
 import br.ufrj.spemarti.webservice.entity.FragmentDefinition;
 import br.ufrj.spemarti.webservice.entity.Image;
+import br.ufrj.spemarti.webservice.entity.LabeledText;
+import br.ufrj.spemarti.webservice.entity.List;
+import br.ufrj.spemarti.webservice.entity.Matrix;
+import br.ufrj.spemarti.webservice.entity.Question;
+import br.ufrj.spemarti.webservice.entity.SimpleInformationElement;
+import br.ufrj.spemarti.webservice.entity.Text;
+import br.ufrj.spemarti.webservice.entity.TextType;
 
 
 public class Client {
@@ -27,7 +35,13 @@ public class Client {
        ArtifactDefinition artifact = new ArtifactDefinition();
        artifact.setaKind(ArtifactKinds.DIAGRAM);
        artifact.setPresentationName("artefatoTeste");
-       geraRelacionamento(artifact, geraNovoDiagrama("DiagramaTeste"));
+       java.util.List<SimpleInformationElement> listaElemento = new ArrayList<SimpleInformationElement>();
+       listaElemento.add(geraQuestion("questão"));
+       listaElemento.add(geraNovoDiagrama("diagrama"));
+      
+       geraRelacionamento(artifact, geraNovaLista("lista", listaElemento));
+      // geraRelacionamento(artifact, geraNovoDiagrama("diagrama"));
+       //geraRelacionamento(artifact, geraQuestion("questão"));
        workspace.checkIn(artifact, "/", "projeto", "artefatoImagem");
        
     	
@@ -68,6 +82,52 @@ public class Client {
     	}
     	
     	return sieDiagram;
+    }
+    
+    public static List geraNovaLista(String presentationName, java.util.List<SimpleInformationElement> listaElemento){
+    	List list = new List();
+    	list.setPresentationName(presentationName);
+    	list.setLabelVersion(presentationName);
+    	
+    	list.getContents().addAll(listaElemento);
+    	
+    	return list;
+    	
+    }
+    
+    public static Question geraQuestion(String presentationName){
+    	Question question = new Question();
+    	question.setPresentationName(presentationName);
+    	for(int i=0 ; i< 2; i++){
+    		Text ask = new Text();
+    		ask.addLabel(presentationName +"::ask::"+ i);
+    		ask.setPresentationName(presentationName +"::ask::"+ i);
+    		ask.setTextType(TextType.ASK);
+    		ask.setValue("ask " + i);
+    		LabeledText answer = new LabeledText();
+    		answer.addLabel(presentationName +"::answer::"+ i);
+    		answer.setPresentationName(presentationName +"::answer::"+ i);
+    		answer.setTextType(TextType.ANSWER);
+    		answer.setValue("answer "+ i);
+    		answer.setLabel("label "+ i);
+    		question.getTexts().add(ask);
+    		question.getTexts().add(answer);
+    	}
+    	
+    	return question;
+    }
+    
+    public static Matrix geraNovaMatriz(String presentationName, List cabecalho, java.util.List<List> linhas){
+    	Matrix matrix = new Matrix();
+    	matrix.setPresentationName(presentationName);
+    	matrix.setLabelVersion(presentationName);
+    	matrix.setHeader(cabecalho);
+    	for(List lista: linhas){
+    		lista.getMatrix().add(matrix);
+    		matrix.getLines().add(lista);
+    	}
+    	
+    	return matrix;
     }
     
     public static void geraRelacionamento(ArtifactDefinition artefato, FragmentDefinition fragment){
