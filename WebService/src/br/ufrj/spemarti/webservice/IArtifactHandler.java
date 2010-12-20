@@ -48,7 +48,7 @@ public interface IArtifactHandler {
 	 * @param idUsuario
 	 * @return
 	 */
-	boolean remove(ArtifactDefinition parent, String presentationName, Integer idUsuario);
+	boolean remove(ArtifactDefinition parent, FragmentDefinition fragment, Integer idUsuario);
 	
 	List<ArtifactFragment_Relationship> recuperarRelacionamentosArtefato(Integer idArtefato);
 

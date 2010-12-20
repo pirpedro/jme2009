@@ -108,10 +108,10 @@ public class ArtifactHandler implements IArtifactHandler{
 		}
 		
 		//recupero os relacionamentos do artefato antigo e recrio para o novo
-		for(ArtifactFragment_Relationship rel : recuperarRelacionamentosArtefato(lastRootId)){
+		for(ArtifactFragment_Relationship rel : ((ArtifactDefinition)lastRoot).getArtifactFragment()){
 			ArtifactFragment_Relationship newRel = new ArtifactFragment_Relationship();
 			newRel.setArtifact(artifact);
-			newRel.setContainers(rel.getContainers());
+			newRel.getContainers().addAll(rel.getContainers());
 			em.persist(newRel);
 		}
 		em.flush();
@@ -214,7 +214,7 @@ public class ArtifactHandler implements IArtifactHandler{
 		return true;
 	}
 
-	public boolean remove(ArtifactDefinition parent, String presentationName,
+	public boolean remove(ArtifactDefinition parent, FragmentDefinition fragment,
 			Integer idUsuario) {
 		User user = userHandler.recuperarPorId(idUsuario);
 		if(user == null){
@@ -224,10 +224,16 @@ public class ArtifactHandler implements IArtifactHandler{
 		if(parent==null){
 			throw new RuntimeException("Não foi possível completar a operação");
 		}
-		ArtifactFragment_Relationship rel = recuperaRelacionamento(parent.getId(), presentationName);
+		
+		fragment = validaFragmento(fragment, user);
+		if(fragment == null){
+			throw new RuntimeException("Não foi possível completar a operação");
+		}
+		
+		ArtifactFragment_Relationship rel = recuperaRelacionamento(parent.getId(), fragment.getPresentationName());
 		
 		if(rel==null){
-			throw new RuntimeException("O fragmento " + presentationName + "não existe no artefato " + parent.getPresentationName());
+			throw new RuntimeException("O fragmento " + fragment.getPresentationName() + "não existe no artefato " + parent.getPresentationName());
 		}
 		
 		try{
@@ -245,7 +251,30 @@ public class ArtifactHandler implements IArtifactHandler{
 			Integer idArtefato) {
 		Query query = em.createNamedQuery("ArtifactFragment.recuperarPorArtifact");
 		query.setParameter("idArtifact", idArtefato);
-		return query.getResultList();
+		
+		try{
+			return query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}	
+	}
+	
+	public FragmentDefinition validaFragmento(FragmentDefinition fragment, User user){
+		VersionHistory vh = vhHandler.recuperaVersionHistoryAtivo(fragment.getPresentationName());
+		
+		Version root = vh.getRootVersion();
+		
+		if(!root.getId().equals(fragment.getId())){
+			throw new RuntimeException("Não foi possível realizar a operação");
+		}
+		if(!root.getRevision().equals(fragment.getRevision())){
+			throw new RuntimeException("Não foi possível realizar a operação");
+		}
+		
+		return fragment;
+		
+		
 	}
 
 }

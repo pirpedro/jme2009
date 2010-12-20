@@ -34,8 +34,8 @@ public interface Svn extends Remote {
         void removeUser(String login, String password);
         void updateUser(String login, String oldPass, String newPass);
         
-        VersionedExtentGroup showSvnRepository(String path);
-       VersionedExtentGroup showSvnRepositorySubItem(String path, String folder, String fileName);
+        VersionedGroup showSvnRepository(String path);
+       VersionedGroup showSvnRepositorySubItem(String path, String folder, String fileName);
     		
        
 }

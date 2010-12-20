@@ -90,7 +90,7 @@ public class FragmentHandler implements IFragmentHandler{
 			throw new RuntimeException("Não foi possível recuperar o histórico do fragmento " + fragment.getPresentationName());
 		}
 		
-		//significa que para o cliente, a entidade já está versionada corretamene
+		//significa que para o cliente, a entidade já está versionada corretamente
 		if(fragment.getId()!=null){
 			if(!vh.getRootVersion().getId().equals(fragment.getId())){
 				throw new RuntimeException("Erro ao modificar o fragmento "+ fragment.getPresentationName());
@@ -99,9 +99,13 @@ public class FragmentHandler implements IFragmentHandler{
 			
 		}else{
 		
-			//o fragmento que vem para ser modificado deve conter o numero de revisão de sua versão anterior para comparação.
-			if(vh.getRootVersion().getRevision()!= fragment.getRevision()){
-				throw new RuntimeException("Fragmento não sincronizado com o svn.");
+			if(fragment.getPreviousVersion()==null){
+				throw new RuntimeException("Não foi definida uma versão anterior para o artefato que está sendo modificado");
+			}
+			
+			if(!fragment.getPreviousVersion().getRevision().equals(vh.getRootVersion().getRevision())){
+				throw new RuntimeException("O artefato " + fragment.getPresentationName() + "já foi alterado previamente");
+				
 			}
 			
 			fragment.setCreationDate(new Date());
@@ -185,8 +189,7 @@ public class FragmentHandler implements IFragmentHandler{
 	}
 	
 	private FragmentDefinition modifyFragment(FragmentDefinition pai, FragmentDefinition fragment, User user){
-		//modificar o fragmento
-		fragment = modifyFragment(fragment, user);
+		//TODO
 		
 		return null;
 	}
