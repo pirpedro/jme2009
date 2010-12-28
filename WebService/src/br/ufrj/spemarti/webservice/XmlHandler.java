@@ -22,7 +22,10 @@ public class XmlHandler {
 		CONTAINER,
 		FRAGMENT,
 		CONTAINERS,
-		FRAGMENTS
+		FRAGMENTS,
+		ARTIFACT_CONTAINER,
+		ARTIFACT_FRAGMENT;
+		
 	}
 	
 	public enum WorkProductAttributes{
@@ -95,13 +98,33 @@ public class XmlHandler {
 		}
 		
 		if(artifact.getArtifactContainer().size()!=0){
-			Element containers = new Element(WorkProductType.CONTAINERS.toString());
-			rootElement.addContent(containers);
-			for(ArtifactContainer_Relationship rel : artifact.getArtifactContainer()){
-				
-			}
+			Element artifactContainers = new Element(WorkProductType.ARTIFACT_CONTAINER.toString());
 			
+			for(ArtifactContainer_Relationship rel : artifact.getArtifactContainer()){
+				Element containers = new Element(WorkProductType.CONTAINERS.toString());
+				
+				for(ContainerDefinition container : rel.getContainers()){
+					containers.addContent(geraEstruturaContainer(container));
+				}
+				artifactContainers.addContent(containers);
+			}
+			rootElement.addContent(artifactContainers);
 		}
+		
+		if(artifact.getArtifactFragment().size()!=0){
+			Element artifactFragments = new Element(WorkProductType.ARTIFACT_FRAGMENT.toString());
+			
+			for(ArtifactContainer_Relationship rel : artifact.getArtifactContainer()){
+				Element containers = new Element(WorkProductType.CONTAINERS.toString());
+				
+				for(ContainerDefinition container : rel.getContainers()){
+					containers.addContent(geraEstruturaContainer(container));
+				}
+				artifactFragments.addContent(containers);
+			}
+			rootElement.addContent(artifactFragments);
+		}
+		
 		
 		
 		return null;
